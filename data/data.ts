@@ -3,11 +3,13 @@ import { FilterSchemaItem } from "@/model/schema";
 const schema: FilterSchemaItem[] = [
   {
     "name": "marca",
-    "type": "text"
+    "type": "option",
+    "options": ["marca1", "marca2", "marca3", "marca4", "marca5", "marca6"]
   },
   {
     "name": "modelo",
-    "type": "text"
+    "type": "option",
+    "options": ["modelo1", "modelo2", "modelo3", "modelo4", "modelo5", "modelo6"]
   },
   {
     "name": "año",
@@ -20,22 +22,12 @@ const schema: FilterSchemaItem[] = [
   {
     "name": "traccion",
     "type": "option",
-    "options": ["delantera", "trasera"]
-  },
-  {
-    "name": "sistema_traccion",
-    "type": "option",
-    "options": ["4x2", "4x4"]
+    "options": ["delantera 4x2", "trasera 4x2", "4x4"]
   },
   {
     "name": "combustible",
     "type": "option",
     "options": ["gasolina", "diésel", "híbrido", "eléctrico"]
-  },
-  {
-    "name": "transmision",
-    "type": "option",
-    "options": ["mecánico", "automático"]
   }
 ];
 

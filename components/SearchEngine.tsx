@@ -1,7 +1,7 @@
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
-import { ChevronDownIcon, EditIcon } from "@/components/ui/icon";
+import { ChevronDownIcon, SearchIcon, TrashIcon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
 import {
   Select,
@@ -15,7 +15,7 @@ import {
   SelectPortal,
   SelectTrigger,
 } from "@/components/ui/select";
-
+import { Text } from "@/components/ui/text";
 import { FilterSchemaItem } from "@/model/schema";
 import React, { useState } from "react";
 
@@ -47,26 +47,28 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Heading style={styles.heading} size="lg">Buscar en Catalogo</Heading>
-      <Heading size="sm">Busqueda general</Heading>
-      <Input variant="outline" size="lg" style={styles.searchBar}>
-        <InputField placeholder="Buscar..." value={searchTerm} />
+      <Heading style={styles.heading} size="xl">Buscar</Heading>
+      <Input variant="outline" size="xl" style={styles.searchBar}>
+        <InputField placeholder="Busqueda general" value={searchTerm} onChangeText={setSearchTerm} />
+      </Input>
+      <Input variant="outline" size="xl" style={styles.searchBar}>
+        <InputField placeholder="Busqueda por codigo" value={searchTerm} onChangeText={setSearchTerm} />
       </Input>
       <Divider className="mt-0.5 mb-3" />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
-          <Heading size="sm">{item.name}</Heading>
           {item.type === "text" || item.type === "number" ? (
-            <Input variant="outline" size="md">
+            <Input variant="outline" size="xl">
               <InputField
-                placeholder={item.name}
+                placeholder={`Filtrar por: ${item.name}`}
                 value={filters[item.name] || ""}
+                onChangeText={(value) => handleFilterChange(item.name, value)}
               />
             </Input>
           ) : item.type === "option" ? (
-            <Select>
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput placeholder="Seleccionar opción" />
+            <Select value={filters[item.name] || ""} onValueChange={(value) => handleFilterChange(item.name, value)}>
+              <SelectTrigger variant="outline" size="xl">
+                <SelectInput placeholder={`Filtrar por: ${item.name}`} />
                 <SelectIcon className="mr-3" as={ChevronDownIcon} />
               </SelectTrigger>
               <SelectPortal>
@@ -80,7 +82,6 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
                       label={opt}
                       key={i}
                       value={opt}
-                      onPress={() => handleFilterChange(item.name, opt)}
                     >
                       {opt}
                     </SelectItem>
@@ -93,11 +94,13 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
       ))}
       {/* Botones */}
       <View style={styles.buttonsContainer}>
-        <Button size="lg" className="rounded-full p-3.5">
-          <ButtonIcon as={EditIcon} />
+        <Button size="xl" className="rounded-full p-3.5" style={[styles.roundBtn]}>
+          <ButtonIcon as={SearchIcon} size="xl" />
+          <Text style={styles.labelBtn}>Buscar</Text>
         </Button>
-        <Button size="lg" className="rounded-full p-3.5">
-          <ButtonIcon as={EditIcon} />
+        <Button size="xl" className="rounded-full p-3.5" style={[styles.roundBtn]}>
+          <ButtonIcon as={TrashIcon} size="xl" />
+          <Text style={styles.labelBtn}>Limpiar</Text>
         </Button>
       </View>
     </ScrollView>
@@ -109,8 +112,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   searchBar: {
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: 8,
   },
   picker: {
     height: 48,
@@ -132,6 +134,8 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     marginBottom: 8,
+    display: "flex",
+    flexDirection: "column",
   },
   label: {
     marginBottom: 4,
@@ -167,7 +171,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontWeight: "bold",
   },
+  labelBtn: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
   heading: {
     marginBottom: 16,
+  },
+  roundBtn: {
+    width: 100,
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column",
   },
 });

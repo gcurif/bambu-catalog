@@ -27,17 +27,17 @@ export default function TabLayout() {
         }),
       }}>
       <Tabs.Screen
-        name="search"
+        name="index"
         options={{
-          title: 'index',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="search" color={color} />,
+          title: 'Buscar',
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="search" color={color} />,
         }}
       />
       <Tabs.Screen
         name="add"
         options={{
           title: 'Agregar',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="plus" color={color} />,
         }}
       />
     </Tabs>
