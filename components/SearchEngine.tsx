@@ -1,20 +1,25 @@
-import { FilterSchemaItem } from '@/model/schema';
-import { FontAwesome } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
-import { Searchbar, TextInput } from 'react-native-paper';
-
+import { Button, ButtonIcon } from "@/components/ui/button";
+import { Divider } from "@/components/ui/divider";
+import { Heading } from "@/components/ui/heading";
+import { ChevronDownIcon, EditIcon } from "@/components/ui/icon";
+import { Input, InputField } from "@/components/ui/input";
 import {
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+  Select,
+  SelectBackdrop,
+  SelectContent,
+  SelectDragIndicator,
+  SelectDragIndicatorWrapper,
+  SelectIcon,
+  SelectInput,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
+} from "@/components/ui/select";
 
+import { FilterSchemaItem } from "@/model/schema";
+import React, { useState } from "react";
 
-
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
@@ -27,7 +32,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   onSearch,
   onClear,
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
 
   const handleFilterChange = (key: string, value: string) => {
@@ -35,59 +40,65 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   };
 
   const handleClear = () => {
-    setSearchTerm('');
+    setSearchTerm("");
     setFilters({});
     onClear?.();
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <Searchbar
-          placeholder="Buscar..."
-          value={searchTerm}
-          onChangeText={setSearchTerm}
-          mode='bar'
-          icon='search'
-          style={styles.searchBar}
-        />
+      <Heading style={styles.heading} size="lg">Buscar en Catalogo</Heading>
+      <Heading size="sm">Busqueda general</Heading>
+      <Input variant="outline" size="lg" style={styles.searchBar}>
+        <InputField placeholder="Buscar..." value={searchTerm} />
+      </Input>
+      <Divider className="mt-0.5 mb-3" />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
-          {item.type === 'text' || item.type === 'number' ? (
-            <TextInput
-              label={item.name}
-              keyboardType={item.type === 'number' ? 'numeric' : 'default'}
-              value={filters[item.name] || ''}
-              onChangeText={(value) => handleFilterChange(item.name, value)}
-              mode="outlined"
-            />
-          ) : item.type === 'option' ? (
-            <View >
-              <Picker
-                style={styles.picker}
-                selectedValue={filters[item.name] || ''}
-                onValueChange={(value: string) => handleFilterChange(item.name, value)}>
-                <Picker.Item label="Seleccione..." value="" />
-                {item.options?.map((opt, i) => (
-                  <Picker.Item key={i} label={opt} value={opt} />
-                ))}
-              </Picker>
-            </View>
+          <Heading size="sm">{item.name}</Heading>
+          {item.type === "text" || item.type === "number" ? (
+            <Input variant="outline" size="md">
+              <InputField
+                placeholder={item.name}
+                value={filters[item.name] || ""}
+              />
+            </Input>
+          ) : item.type === "option" ? (
+            <Select>
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput placeholder="Seleccionar opción" />
+                <SelectIcon className="mr-3" as={ChevronDownIcon} />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  {item.options?.map((opt, i) => (
+                    <SelectItem
+                      label={opt}
+                      key={i}
+                      value={opt}
+                      onPress={() => handleFilterChange(item.name, opt)}
+                    >
+                      {opt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </SelectPortal>
+            </Select>
           ) : null}
         </View>
       ))}
-
       {/* Botones */}
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={[styles.circleButton, styles.searchBtn]}
-          onPress={() => onSearch?.(searchTerm, filters)}>
-          <FontAwesome name="search" size={24} />
-          <Text>Buscar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.circleButton} onPress={handleClear}>
-          <FontAwesome name="trash" size={24} />
-          <Text>Limpiar</Text>
-        </TouchableOpacity>
+        <Button size="lg" className="rounded-full p-3.5">
+          <ButtonIcon as={EditIcon} />
+        </Button>
+        <Button size="lg" className="rounded-full p-3.5">
+          <ButtonIcon as={EditIcon} />
+        </Button>
       </View>
     </ScrollView>
   );
@@ -102,11 +113,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   picker: {
-    height: 48
+    height: 48,
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 12,
@@ -114,17 +125,17 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    paddingVertical: Platform.OS === 'ios' ? 12 : 8,
+    paddingVertical: Platform.OS === "ios" ? 12 : 8,
   },
   icon: {
     marginHorizontal: 8,
   },
   filterContainer: {
-    marginBottom: 16,
+    marginBottom: 8,
   },
   label: {
     marginBottom: 4,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
@@ -136,20 +147,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 24,
   },
   circleButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 90,
     height: 90,
     borderRadius: 45,
     borderWidth: 1,
-    color: '#fff',
+    color: "#fff",
   },
   searchBtn: {
-    backgroundColor: 'green',
-  }
+    backgroundColor: "green",
+  },
+  labelInput: {
+    marginBottom: 8,
+    fontWeight: "bold",
+  },
+  heading: {
+    marginBottom: 16,
+  },
 });

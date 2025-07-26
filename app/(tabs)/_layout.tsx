@@ -29,7 +29,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: 'Buscar',
+          title: 'index',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="search" color={color} />,
         }}
       />

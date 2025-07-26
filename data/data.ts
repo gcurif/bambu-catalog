@@ -2,27 +2,41 @@ import { FilterSchemaItem } from "@/model/schema";
 
 const schema: FilterSchemaItem[] = [
   {
-    "name": "caracteristica1",
+    "name": "marca",
     "type": "text"
   },
   {
-    "name": "caracteristica2",
+    "name": "modelo",
+    "type": "text"
+  },
+  {
+    "name": "año",
     "type": "number"
   },
   {
-    "name": "caracteristica3",
-    "type": "option",
-    "options": ["opcionA", "opcionB", "opcionC"]
+    "name": "cilindrada",
+    "type": "number"
   },
   {
-    "name": "caracteristica4",
-    "type": "text"
+    "name": "traccion",
+    "type": "option",
+    "options": ["delantera", "trasera"]
   },
   {
-    "name": "caracteristica5",
+    "name": "sistema_traccion",
     "type": "option",
-    "options": ["opcionX", "opcionY"]
+    "options": ["4x2", "4x4"]
+  },
+  {
+    "name": "combustible",
+    "type": "option",
+    "options": ["gasolina", "diésel", "híbrido", "eléctrico"]
+  },
+  {
+    "name": "transmision",
+    "type": "option",
+    "options": ["mecánico", "automático"]
   }
-]
+];
 
 export const getSchema = () => schema;
