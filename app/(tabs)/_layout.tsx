@@ -40,6 +40,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={32} name="plus" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="edit"
+        options={{
+          title: 'Editar',
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="edit.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }

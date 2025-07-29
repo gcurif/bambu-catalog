@@ -1,5 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
+import ItemDetail from '@/components/ItemDetail';
 import { SearchEngine } from '@/components/SearchEngine';
 import { getSchema } from '@/data/data';
 
@@ -7,13 +8,14 @@ export default function TabTwoScreen() {
 
   const schema = getSchema();
   return (
-    <View style={styles.titleContainer}>
+    <ScrollView style={styles.titleContainer}>
       <SearchEngine
         schema={schema}
         onSearch={(term, filters) => console.log(term, filters)}
         onClear={() => console.log('limpiar')}
       />
-    </View>
+      <ItemDetail />
+    </ScrollView>
   );
 }
 
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   titleContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 8,
   },
 });

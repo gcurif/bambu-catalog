@@ -11,7 +11,8 @@ type IconSymbolName =
   | 'chevron.left.forwardslash.chevron.right'
   | 'chevron.right'
   | 'plus'
-  | 'search';
+  | 'search'
+  | 'edit.fill';
 
 /**
  * Add your SF Symbols to Material Icons mappings here.
@@ -24,7 +25,8 @@ const MAPPING: Record<IconSymbolName, ComponentProps<typeof MaterialIcons>['name
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'plus': 'add',
-  'search': 'search'
+  'search': 'search',
+  'edit.fill': 'edit', // Material Icons does not have a filled version, so
 };
 
 /**

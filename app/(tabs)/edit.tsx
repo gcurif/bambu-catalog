@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 
-import { CreateItem } from '@/components/CreateItem';
+import { EditItem } from '@/components/EditItem';
 import { getSchema } from '@/data/data';
 
 export default function HomeScreen() {
   const schema = getSchema();
   return (
     <View style={styles.titleContainer}>
-      <CreateItem
+      <EditItem
         schema={schema}
         onSearch={(term, filters) => console.log(term, filters)}
         onClear={() => console.log('limpiar')}
