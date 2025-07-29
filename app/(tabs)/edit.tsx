@@ -19,8 +19,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 8,
+    backgroundColor: "rgba(217, 235, 255, 1)",
+    height: "100%",
   },
   stepContainer: {
     gap: 8,

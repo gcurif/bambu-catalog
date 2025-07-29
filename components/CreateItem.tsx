@@ -63,6 +63,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [toastId, setToastId] = React.useState<string>("");
+  const [newOption, setNewOption] = useState<string>("");
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -72,6 +73,15 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
     setSearchTerm("");
     setFilters({});
     onClear?.();
+  };
+
+  const saveItem = () => {};
+  const handleFilterChangeNumber = (key: string, value: string) => {
+    const trimmed = value.trim();
+    if (trimmed === "" || /^-?\d+(\.\d+)?$/.test(trimmed)) {
+      const numericValue = trimmed === "" ? "" : String(Number(trimmed));
+      handleFilterChange(key, numericValue);
+    }
   };
 
   const toast = useToast();
@@ -112,11 +122,19 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
-            <Input variant="outline" size="xl">
+            <Input
+              variant="outline"
+              size="xl"
+              style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
+            >
               <InputField
                 placeholder={item.name}
                 value={filters[item.name] || ""}
-                onChangeText={(value) => handleFilterChange(item.name, value)}
+                onChangeText={(value) =>
+                  item.type === "number"
+                    ? handleFilterChangeNumber(item.name, value)
+                    : handleFilterChange(item.name, value)
+                }
               />
             </Input>
           ) : item.type === "option" ? (
@@ -124,7 +142,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
               <Select
                 selectedValue={filters[item.name] || ""}
                 onValueChange={(value) => handleFilterChange(item.name, value)}
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
               >
                 <SelectTrigger variant="outline" size="xl">
                   <SelectInput placeholder={item.name} />
@@ -146,7 +164,10 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
               </Select>
               <Button
                 size="sm"
-                style={{ marginLeft: 8 }}
+                style={{
+                  marginLeft: 8,
+                  backgroundColor: "rgba(255, 255, 255, 1)",
+                }}
                 onPress={() => setShowModalAdd(true)}
                 variant="outline"
               >
@@ -191,7 +212,11 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
           </ModalHeader>
           <ModalBody>
             <Input variant="outline" size="xl">
-              <InputField placeholder="Nombre del item" />
+              <InputField
+                placeholder="Nombre del item"
+                value={newOption}
+                onChangeText={setNewOption}
+              />
             </Input>
           </ModalBody>
           <ModalFooter>
@@ -224,6 +249,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     marginBottom: 8,
+    backgroundColor: "rgba(255, 255, 255, 1)",
   },
   picker: {
     height: 48,

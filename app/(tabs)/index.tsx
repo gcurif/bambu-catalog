@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "column",
     gap: 8,
+    backgroundColor: "rgba(217, 235, 255, 1)",
   },
   resultsContainer: {
     marginTop: 8,

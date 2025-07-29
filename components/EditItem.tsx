@@ -76,7 +76,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
               <Select
                 selectedValue={filters[item.name] || ""}
                 onValueChange={(value) => handleFilterChange(item.name, value)}
-                style={{ flex: 1, width: "100%" }}
+                style={{ flex: 1, width: "100%", backgroundColor: "white" }}
               >
                 <SelectTrigger variant="outline" size="xl">
                   <SelectInput placeholder={item.name} />
@@ -106,7 +106,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
               >
                 <Button
                   size="lg"
-                  style={{ marginRight: 4, flex: 1 }}
+                  style={{ marginRight: 4, flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
                   onPress={() => {
                     setShowModalAdd(true);
                   }}
@@ -116,7 +116,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                 </Button>
                 <Button
                   size="lg"
-                  style={{ marginRight: 4, flex: 1 }}
+                  style={{ marginRight: 4, flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
                   onPress={() => {
                     setShowModalEdit(true);
                     setValueToEdit(filters[item.name]);
@@ -131,7 +131,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                     setShowModalDelete(true);
                   }}
                   variant="outline"
-                  style={{ flex: 1 }}
+                  style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
                 >
                   <Text>Eliminar</Text>
                 </Button>

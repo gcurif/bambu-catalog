@@ -40,11 +40,14 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleFilterChangeNumber = (key: string, value: string) => {
-    if (!/^-?\d+(\.\d+)?$/.test(value.trim())) return; // ignora si no es número válido
-    const numericValue = String(Number(value));
+const handleFilterChangeNumber = (key: string, value: string) => {
+  const trimmed = value.trim();
+  if (trimmed === '' || /^-?\d+(\.\d+)?$/.test(trimmed)) {
+    const numericValue = trimmed === '' ? '' : String(Number(trimmed));
     handleFilterChange(key, numericValue);
-  };
+  }
+};
+
 
   // Removed duplicate filters declaration
 
@@ -67,13 +70,6 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
       </Heading>
       <Input variant="outline" size="xl" style={styles.searchBar}>
         <InputField
-          placeholder="Busqueda general"
-          value={filters.general || ""}
-          onChangeText={(value) => handleFilterChange("general", value)}
-        />
-      </Input>
-      <Input variant="outline" size="xl" style={styles.searchBar}>
-        <InputField
           placeholder="Busqueda por codigo"
           value={filters.code || ""}
           onChangeText={(value) => handleFilterChange("code", value)}
@@ -83,7 +79,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
-            <Input variant="outline" size="xl">
+            <Input variant="outline" size="xl" style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
               <InputField
                 placeholder={`Filtrar por: ${item.name}`}
                 value={filters[item.name] || ""}
@@ -98,6 +94,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
             <Select
               selectedValue={filters[item.name] || ""}
               onValueChange={(value) => handleFilterChange(item.name, value)}
+              style={{ backgroundColor: "rgba(255, 255, 255, 1)", }}
             >
               <SelectTrigger variant="outline" size="xl">
                 <SelectInput placeholder={`Filtrar por: ${item.name}`} />
@@ -125,7 +122,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
         <Button
           size="xl"
           className="rounded-full p-3.5"
-          style={[styles.roundBtn]}
+          style={[styles.roundBtn, {backgroundColor: "green"}]}
           onPress={onSearchClick}
         >
           <ButtonIcon as={SearchIcon} size="xl" />
@@ -151,6 +148,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     marginBottom: 8,
+    backgroundColor: "rgba(255, 255, 255, 1)",
   },
   picker: {
     height: 48,
