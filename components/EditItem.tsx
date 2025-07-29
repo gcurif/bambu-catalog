@@ -44,6 +44,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
   const [valueToEdit, setValueToEdit] = useState<string>("");
 
   const handleFilterChange = (key: string, value: string) => {
@@ -126,7 +127,9 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                 </Button>
                 <Button
                   size="lg"
-                  onPress={() => handleFilterChange(item.name, "")}
+                  onPress={() => {
+                    setShowModalDelete(true);
+                  }}
                   variant="outline"
                   style={{ flex: 1 }}
                 >
@@ -229,6 +232,47 @@ export const EditItem: React.FC<SearchEngineProps> = ({
               }}
             >
               <ButtonText>Guardar</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={showModalDelete}
+        onClose={() => {
+          setShowModalDelete(false);
+        }}
+        size="md"
+      >
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="md" className="text-typography-950">
+              ¿Esta seguro que desea eliminar esta opción?
+            </Heading>
+            <ModalCloseButton>
+              <Icon
+                as={CloseIcon}
+                size="md"
+                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+              />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalFooter>
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={() => {
+                setShowModalDelete(false);
+              }}
+            >
+              <ButtonText>Volver</ButtonText>
+            </Button>
+            <Button
+              onPress={() => {
+                setShowModalDelete(false);
+              }}
+            >
+              <ButtonText>Eliminar</ButtonText>
             </Button>
           </ModalFooter>
         </ModalContent>
