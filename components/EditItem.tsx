@@ -1,6 +1,16 @@
-import { Button } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { ChevronDownIcon } from "@/components/ui/icon";
+import { ChevronDownIcon, CloseIcon, Icon } from "@/components/ui/icon";
+import { Input, InputField } from "@/components/ui/input";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@/components/ui/modal";
 import {
   Select,
   SelectBackdrop,
@@ -32,6 +42,9 @@ export const EditItem: React.FC<SearchEngineProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
+  const [showModalAdd, setShowModalAdd] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [valueToEdit, setValueToEdit] = useState<string>("");
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -52,11 +65,17 @@ export const EditItem: React.FC<SearchEngineProps> = ({
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? null : item.type ===
             "option" ? (
-            <View style={{ flexDirection: "column", alignItems: "center", marginTop: 16 }}>
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: 16,
+              }}
+            >
               <Select
-                value={filters[item.name] || ""}
+                selectedValue={filters[item.name] || ""}
                 onValueChange={(value) => handleFilterChange(item.name, value)}
-                style={{ flex: 1, width: '100%' }}
+                style={{ flex: 1, width: "100%" }}
               >
                 <SelectTrigger variant="outline" size="xl">
                   <SelectInput placeholder={item.name} />
@@ -76,11 +95,20 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                   </SelectContent>
                 </SelectPortal>
               </Select>
-              <View style={{ flexDirection: "row", marginTop: 8, justifyContent: "space-around", alignItems: "center" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 8,
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
                 <Button
                   size="lg"
                   style={{ marginRight: 4, flex: 1 }}
-                  onPress={() => {/* lógica para agregar */}}
+                  onPress={() => {
+                    setShowModalAdd(true);
+                  }}
                   variant="outline"
                 >
                   <Text>Agregar</Text>
@@ -88,7 +116,10 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                 <Button
                   size="lg"
                   style={{ marginRight: 4, flex: 1 }}
-                  onPress={() => {/* lógica para editar */}}
+                  onPress={() => {
+                    setShowModalEdit(true);
+                    setValueToEdit(filters[item.name]);
+                  }}
                   variant="outline"
                 >
                   <Text>Editar</Text>
@@ -101,11 +132,107 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                 >
                   <Text>Eliminar</Text>
                 </Button>
-                </View>
+              </View>
             </View>
           ) : null}
         </View>
       ))}
+      <Modal
+        isOpen={showModalAdd}
+        onClose={() => {
+          setShowModalAdd(false);
+        }}
+        size="md"
+      >
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="md" className="text-typography-950">
+              Agregar nueva opción
+            </Heading>
+            <ModalCloseButton>
+              <Icon
+                as={CloseIcon}
+                size="md"
+                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+              />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalBody>
+            <Input variant="outline" size="xl">
+              <InputField placeholder="Nombre del item" />
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={() => {
+                setShowModalAdd(false);
+              }}
+            >
+              <ButtonText>Cancelar</ButtonText>
+            </Button>
+            <Button
+              onPress={() => {
+                setShowModalAdd(false);
+              }}
+            >
+              <ButtonText>Agregar</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={showModalEdit}
+        onClose={() => {
+          setShowModalEdit(false);
+        }}
+        size="md"
+      >
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="md" className="text-typography-950">
+              Editar opción
+            </Heading>
+            <ModalCloseButton>
+              <Icon
+                as={CloseIcon}
+                size="md"
+                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+              />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalBody>
+            <Input variant="outline" size="xl">
+              <InputField
+                placeholder="Nombre del item"
+                value={valueToEdit}
+                onChangeText={setValueToEdit}
+              />
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={() => {
+                setShowModalEdit(false);
+              }}
+            >
+              <ButtonText>Cancelar</ButtonText>
+            </Button>
+            <Button
+              onPress={() => {
+                setShowModalEdit(false);
+              }}
+            >
+              <ButtonText>Guardar</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </ScrollView>
   );
 };

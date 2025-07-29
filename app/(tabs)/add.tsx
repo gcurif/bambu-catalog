@@ -1,10 +1,12 @@
 import { StyleSheet, View } from 'react-native';
 
 import { CreateItem } from '@/components/CreateItem';
+
 import { getSchema } from '@/data/data';
 
 export default function HomeScreen() {
   const schema = getSchema();
+
   return (
     <View style={styles.titleContainer}>
       <CreateItem

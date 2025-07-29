@@ -1,8 +1,20 @@
-import { Button, ButtonIcon } from "@/components/ui/button";
+import { FilterSchemaItem } from "@/model/schema";
+import React, { useState } from "react";
+
+// UI Components
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
-import { AddIcon, ChevronDownIcon } from "@/components/ui/icon";
+import {
+  AddIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  Icon,
+} from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+
+// Select Components
 import {
   Select,
   SelectBackdrop,
@@ -15,9 +27,24 @@ import {
   SelectPortal,
   SelectTrigger,
 } from "@/components/ui/select";
-import { Text } from "@/components/ui/text";
-import { FilterSchemaItem } from "@/model/schema";
-import React, { useState } from "react";
+
+// Modal Components
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@/components/ui/modal";
+
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from "@/components/ui/toast";
 
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
 
@@ -34,6 +61,8 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
+  const [showModalAdd, setShowModalAdd] = useState(false);
+  const [toastId, setToastId] = React.useState<string>("");
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -45,11 +74,39 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
     onClear?.();
   };
 
+  const toast = useToast();
+  const showSuccessToast = () => {
+    const newId = Math.random().toString();
+    setToastId(newId);
+    toast.show({
+      id: newId,
+      placement: "top",
+      duration: 3000,
+      render: ({ id }) => {
+        const uniqueToastId = "toast-" + id;
+        return (
+          <Toast nativeID={uniqueToastId} action="muted" variant="solid">
+            <ToastTitle>OK</ToastTitle>
+            <ToastDescription>
+              Producto agregado correctamente!
+            </ToastDescription>
+          </Toast>
+        );
+      },
+    });
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Heading style={styles.heading} size="xl">Agregar nuevo</Heading>
+      <Heading style={styles.heading} size="xl">
+        Agregar nuevo
+      </Heading>
       <Input variant="outline" size="xl" style={styles.searchBar}>
-        <InputField placeholder="Codigo" value={searchTerm} onChangeText={setSearchTerm} />
+        <InputField
+          placeholder="Codigo"
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+        />
       </Input>
       <Divider className="mt-0.5 mb-3" />
       {schema.map((item, index) => (
@@ -65,7 +122,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
           ) : item.type === "option" ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Select
-                value={filters[item.name] || ""}
+                selectedValue={filters[item.name] || ""}
                 onValueChange={(value) => handleFilterChange(item.name, value)}
                 style={{ flex: 1 }}
               >
@@ -90,7 +147,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
               <Button
                 size="sm"
                 style={{ marginLeft: 8 }}
-                onPress={() => handleFilterChange(item.name, "")}
+                onPress={() => setShowModalAdd(true)}
                 variant="outline"
               >
                 <Text>+</Text>
@@ -101,11 +158,62 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
       ))}
       {/* Botones */}
       <View style={styles.buttonsContainer}>
-        <Button size="xl" className="rounded-full p-3.5" style={[styles.roundBtn]}>
+        <Button
+          size="xl"
+          className="rounded-full p-3.5"
+          style={[styles.roundBtn]}
+          onPress={showSuccessToast}
+        >
           <ButtonIcon as={AddIcon} size="xl" />
           <Text style={styles.labelBtn}>Agregar</Text>
         </Button>
       </View>
+      <Modal
+        isOpen={showModalAdd}
+        onClose={() => {
+          setShowModalAdd(false);
+        }}
+        size="md"
+      >
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="md" className="text-typography-950">
+              Agregar nueva opción
+            </Heading>
+            <ModalCloseButton>
+              <Icon
+                as={CloseIcon}
+                size="md"
+                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+              />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalBody>
+            <Input variant="outline" size="xl">
+              <InputField placeholder="Nombre del item" />
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={() => {
+                setShowModalAdd(false);
+              }}
+            >
+              <ButtonText>Cancelar</ButtonText>
+            </Button>
+            <Button
+              onPress={() => {
+                setShowModalAdd(false);
+              }}
+            >
+              <ButtonText>Agregar</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </ScrollView>
   );
 };
