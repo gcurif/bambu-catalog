@@ -23,7 +23,7 @@ import { Platform, ScrollView, StyleSheet, View } from "react-native";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
-  onSearch?: (searchTerm: string, filters: Record<string, string>) => void;
+  onSearch?: (filters: Record<string, string>) => void;
   onClear?: () => void;
 }
 
@@ -32,27 +32,51 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   onSearch,
   onClear,
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
 
   const handleFilterChange = (key: string, value: string) => {
+    console.log(`Filter changed: ${key} = ${value}`);
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleFilterChangeNumber = (key: string, value: string) => {
+    if (!/^-?\d+(\.\d+)?$/.test(value.trim())) return; // ignora si no es número válido
+    const numericValue = String(Number(value));
+    handleFilterChange(key, numericValue);
+  };
+
+  // Removed duplicate filters declaration
+
   const handleClear = () => {
-    setSearchTerm("");
     setFilters({});
     onClear?.();
   };
 
+  const onSearchClick = () => {
+    console.log("Search clicked", filters);
+    if (onSearch) {
+      onSearch(filters);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Heading style={styles.heading} size="xl">Buscar</Heading>
+      <Heading style={styles.heading} size="xl">
+        Buscar
+      </Heading>
       <Input variant="outline" size="xl" style={styles.searchBar}>
-        <InputField placeholder="Busqueda general" value={searchTerm} onChangeText={setSearchTerm} />
+        <InputField
+          placeholder="Busqueda general"
+          value={filters.general || ""}
+          onChangeText={(value) => handleFilterChange("general", value)}
+        />
       </Input>
       <Input variant="outline" size="xl" style={styles.searchBar}>
-        <InputField placeholder="Busqueda por codigo" value={searchTerm} onChangeText={setSearchTerm} />
+        <InputField
+          placeholder="Busqueda por codigo"
+          value={filters.code || ""}
+          onChangeText={(value) => handleFilterChange("code", value)}
+        />
       </Input>
       <Divider className="mt-0.5 mb-3" />
       {schema.map((item, index) => (
@@ -62,11 +86,18 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
               <InputField
                 placeholder={`Filtrar por: ${item.name}`}
                 value={filters[item.name] || ""}
-                onChangeText={(value) => handleFilterChange(item.name, value)}
+                onChangeText={(value) =>
+                  item.type === "number"
+                    ? handleFilterChangeNumber(item.name, value)
+                    : handleFilterChange(item.name, value)
+                }
               />
             </Input>
           ) : item.type === "option" ? (
-            <Select value={filters[item.name] || ""} onValueChange={(value) => handleFilterChange(item.name, value)}>
+            <Select
+              selectedValue={filters[item.name] || ""}
+              onValueChange={(value) => handleFilterChange(item.name, value)}
+            >
               <SelectTrigger variant="outline" size="xl">
                 <SelectInput placeholder={`Filtrar por: ${item.name}`} />
                 <SelectIcon className="mr-3" as={ChevronDownIcon} />
@@ -78,11 +109,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
                     <SelectDragIndicator />
                   </SelectDragIndicatorWrapper>
                   {item.options?.map((opt, i) => (
-                    <SelectItem
-                      label={opt}
-                      key={i}
-                      value={opt}
-                    >
+                    <SelectItem label={opt} key={i} value={opt}>
                       {opt}
                     </SelectItem>
                   ))}
@@ -94,11 +121,21 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
       ))}
       {/* Botones */}
       <View style={styles.buttonsContainer}>
-        <Button size="xl" className="rounded-full p-3.5" style={[styles.roundBtn]}>
+        <Button
+          size="xl"
+          className="rounded-full p-3.5"
+          style={[styles.roundBtn]}
+          onPress={onSearchClick}
+        >
           <ButtonIcon as={SearchIcon} size="xl" />
           <Text style={styles.labelBtn}>Buscar</Text>
         </Button>
-        <Button size="xl" className="rounded-full p-3.5" style={[styles.roundBtn]}>
+        <Button
+          size="xl"
+          className="rounded-full p-3.5"
+          style={[styles.roundBtn]}
+          onPress={handleClear}
+        >
           <ButtonIcon as={TrashIcon} size="xl" />
           <Text style={styles.labelBtn}>Limpiar</Text>
         </Button>

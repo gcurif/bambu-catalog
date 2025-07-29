@@ -1,21 +1,7 @@
 import React from "react";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 
-const ItemDetail: React.FC = () => {
-  const item = {
-    id: 1,
-    code: "ITEM001",
-    name: "Item Name",
-    img: null,
-    properties: [
-      { name: "Marca", value: "Marca 1", order: 1 },
-      { name: "Modelo", value: "Modelo 1", order: 2 },
-      { name: "Año", value: "1990", order: 3 },
-      { name: "Cilindrada", value: "432432", order: 4 },
-      { name: "Color", value: "342234", order: 5 },
-      { name: "Combustible", value: "dsfdsf", order: 6 },
-    ],
-  };
+const ItemDetail: React.FC<{ item: { name: string; code: string; img: string; properties: { name: string; value: string; order: number; }[]; } }> = ({ item }) => {
 
   return (
     <View style={styles.container}>
@@ -23,10 +9,14 @@ const ItemDetail: React.FC = () => {
       <Text style={styles.code}>Código: {item.code}</Text>
       <View style={styles.imageContainer}>
         {item.img ? (
-          <Image
+          /*<Image
             source={{ uri: item.img }}
             style={{ width: 250, height: 250 }}
-          />
+          />*/
+          <Image
+            source={require("@/assets/images/default.jpg")}
+            style={{ width: 250, height: 250 }}
+          />          
         ) : (
           <Image
             source={require("@/assets/images/default.jpg")}
