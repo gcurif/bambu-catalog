@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import ItemDetail from "@/components/ItemDetail";
 import { SearchEngine } from "@/components/SearchEngine";
 import { Spinner } from "@/components/ui/spinner";
+import { GlobalStyles } from "@/constants/GlobalStyles";
 import { getItems, getSchema } from "@/data/data";
 import { useState } from "react";
 import colors from "tailwindcss/colors";
@@ -33,7 +34,7 @@ export default function TabTwoScreen() {
   };
 
   return (
-    <ScrollView style={styles.titleContainer}>
+    <ScrollView contentContainerStyle={GlobalStyles.container}>
       <SearchEngine
         schema={schema}
         onSearch={handleSearch}
@@ -59,11 +60,6 @@ const styles = StyleSheet.create({
     bottom: -90,
     left: -35,
     position: "absolute",
-  },
-  titleContainer: {
-    flexDirection: "column",
-    gap: 8,
-    backgroundColor: "rgba(217, 235, 255, 1)",
   },
   resultsContainer: {
     marginTop: 8,
