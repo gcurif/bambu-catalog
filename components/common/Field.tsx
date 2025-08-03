@@ -4,11 +4,11 @@ import React from 'react';
 type FieldProps = {
   placeholder: string | undefined;
   value: any;
-  handleChange: (value: any) => void;
+  onChange: (value: any) => void;
   type: string;
 };
 
-const Field: React.FC<FieldProps> = ({ placeholder, value, handleChange, type }) => {
+const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type }) => {
 
     const validateNumber = (value: string) => {
       const trimmed = value.trim();
@@ -16,8 +16,8 @@ const Field: React.FC<FieldProps> = ({ placeholder, value, handleChange, type })
     };
 
     const handleInternalChange = (value: string) => {
-      if (handleChange) {
-        handleChange(value);
+      if (onChange) {
+        onChange(value);
       }
     };
 

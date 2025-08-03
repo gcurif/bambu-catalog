@@ -1,20 +1,13 @@
 import { FilterSchemaItem } from "@/model/schema";
 import React, { useRef, useState } from "react";
 
-// UI Components
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import {
   AddIcon
 } from "@/components/ui/icon";
-import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-
-// Select Components
-
-// Modal Components
-
 
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import Field from "./common/Field";
@@ -51,21 +44,20 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
       <Heading style={styles.heading} size="xl">
         Agregar nuevo
       </Heading>
-      <Input variant="outline" size="xl" style={styles.searchBar}>
-        <InputField
-          placeholder="Codigo"
-          value={searchTerm}
-          onChangeText={setSearchTerm}
-        />
-      </Input>
-      <Divider className="mt-0.5 mb-3" />
+      <Field
+        placeholder="Buscar"
+        value={searchTerm}
+        onChange={setSearchTerm}
+        type="text"
+      />
+      <Divider className="mt-3 mb-3" />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
             <Field
               placeholder={item.name}
               value={filters[item.name] || ""}
-              handleChange={(value) => handleFilterChange(item.name, value)}
+              onChange={(value) => handleFilterChange(item.name, value)}
               type={item.type}
             />
           ) : item.type === "option" ? (
@@ -130,9 +122,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
-  picker: {
-    height: 48,
-  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -157,28 +146,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontWeight: "bold",
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-  },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderRadius: 8,
-  },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 24,
-  },
-  circleButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    borderWidth: 1,
-    color: "#fff",
   },
   searchBtn: {
     backgroundColor: "green",

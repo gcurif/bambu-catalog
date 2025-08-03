@@ -1,26 +1,15 @@
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
-import { ChevronDownIcon, SearchIcon, TrashIcon } from "@/components/ui/icon";
-import { Input, InputField } from "@/components/ui/input";
-import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-} from "@/components/ui/select";
+import { SearchIcon, TrashIcon } from "@/components/ui/icon";
 
 import { Text } from "@/components/ui/text";
 import { FilterSchemaItem } from "@/model/schema";
 import React, { useState } from "react";
 
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import Field from "./common/Field";
+import FieldSelect from "./common/FieldSelect";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
@@ -36,20 +25,8 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   const [filters, setFilters] = useState<Record<string, string>>({});
 
   const handleFilterChange = (key: string, value: string) => {
-    console.log(`Filter changed: ${key} = ${value}`);
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
-
-const handleFilterChangeNumber = (key: string, value: string) => {
-  const trimmed = value.trim();
-  if (trimmed === '' || /^-?\d+(\.\d+)?$/.test(trimmed)) {
-    const numericValue = trimmed === '' ? '' : String(Number(trimmed));
-    handleFilterChange(key, numericValue);
-  }
-};
-
-
-  // Removed duplicate filters declaration
 
   const handleClear = () => {
     setFilters({});
@@ -68,52 +45,32 @@ const handleFilterChangeNumber = (key: string, value: string) => {
       <Heading style={styles.heading} size="xl">
         Buscar
       </Heading>
-      <Input variant="outline" size="xl" style={styles.searchBar}>
-        <InputField
-          placeholder="Busqueda por codigo"
-          value={filters.code || ""}
-          onChangeText={(value) => handleFilterChange("code", value)}
-        />
-      </Input>
+      <Field
+        placeholder="Busqueda por codigo"
+        value={filters.code || ""}
+        onChange={(value) => handleFilterChange("code", value)}
+        type="text"
+      />
       <Divider className="mt-0.5 mb-3" />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
-            <Input variant="outline" size="xl" style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
-              <InputField
-                placeholder={`Filtrar por: ${item.name}`}
-                value={filters[item.name] || ""}
-                onChangeText={(value) =>
-                  item.type === "number"
-                    ? handleFilterChangeNumber(item.name, value)
-                    : handleFilterChange(item.name, value)
-                }
-              />
-            </Input>
+            <Field
+              placeholder={`Filtrar por: ${item.name}`}
+              value={filters[item.name] || ""}
+              onChange={(value) => handleFilterChange(item.name, value)}
+              type={item.type}
+            />
           ) : item.type === "option" ? (
-            <Select
-              selectedValue={filters[item.name] || ""}
-              onValueChange={(value) => handleFilterChange(item.name, value)}
-              style={{ backgroundColor: "rgba(255, 255, 255, 1)", }}
-            >
-              <SelectTrigger variant="outline" size="xl">
-                <SelectInput placeholder={`Filtrar por: ${item.name}`} />
-                <SelectIcon className="mr-3" as={ChevronDownIcon} />
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  {item.options?.map((opt, i) => (
-                    <SelectItem label={opt} key={i} value={opt}>
-                      {opt}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </SelectPortal>
-            </Select>
+            <FieldSelect
+              placeholder={item.name}
+              value={filters[item.name] || ""}
+              handleChange={(value) => handleFilterChange(item.name, value)}
+              options={(item.options ?? []).map((opt) => ({
+                label: opt,
+                value: opt,
+              }))}
+            />
           ) : null}
         </View>
       ))}
@@ -122,7 +79,7 @@ const handleFilterChangeNumber = (key: string, value: string) => {
         <Button
           size="xl"
           className="rounded-full p-3.5"
-          style={[styles.roundBtn, {backgroundColor: "green"}]}
+          style={[styles.roundBtn, { backgroundColor: "green" }]}
           onPress={onSearchClick}
         >
           <ButtonIcon as={SearchIcon} size="xl" />
