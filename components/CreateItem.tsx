@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/toast";
 
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import Field from "./common/Field";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
@@ -62,27 +63,13 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showModalAdd, setShowModalAdd] = useState(false);
-  const [toastId, setToastId] = React.useState<string>("");
+  const [, setToastId] = React.useState<string>("");
   const [newOption, setNewOption] = useState<string>("");
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleClear = () => {
-    setSearchTerm("");
-    setFilters({});
-    onClear?.();
-  };
-
-  const saveItem = () => {};
-  const handleFilterChangeNumber = (key: string, value: string) => {
-    const trimmed = value.trim();
-    if (trimmed === "" || /^-?\d+(\.\d+)?$/.test(trimmed)) {
-      const numericValue = trimmed === "" ? "" : String(Number(trimmed));
-      handleFilterChange(key, numericValue);
-    }
-  };
 
   const toast = useToast();
   const showSuccessToast = () => {
@@ -122,21 +109,12 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
-            <Input
-              variant="outline"
-              size="xl"
-              style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
-            >
-              <InputField
-                placeholder={item.name}
-                value={filters[item.name] || ""}
-                onChangeText={(value) =>
-                  item.type === "number"
-                    ? handleFilterChangeNumber(item.name, value)
-                    : handleFilterChange(item.name, value)
-                }
-              />
-            </Input>
+            <Field
+              placeholder={item.name}
+              value={filters[item.name] || ""}
+              handleChange={(value) => handleFilterChange(item.name, value)}
+              type={item.type}
+            />
           ) : item.type === "option" ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Select
