@@ -1,53 +1,26 @@
 import { FilterSchemaItem } from "@/model/schema";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 // UI Components
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { Button, ButtonIcon } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import {
-  AddIcon,
-  ChevronDownIcon,
-  CloseIcon,
-  Icon,
+  AddIcon
 } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 
 // Select Components
-import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-} from "@/components/ui/select";
 
 // Modal Components
-import {
-  Modal,
-  ModalBackdrop,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@/components/ui/modal";
 
-import {
-  Toast,
-  ToastDescription,
-  ToastTitle,
-  useToast,
-} from "@/components/ui/toast";
 
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import Field from "./common/Field";
+import FieldSelect from "./common/FieldSelect";
+import ModalAddEdit from "./common/ModalAddEdit";
+import { SimpleToast, SimpleToastRef } from "./common/SimpleToast";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
@@ -63,36 +36,16 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showModalAdd, setShowModalAdd] = useState(false);
-  const [, setToastId] = React.useState<string>("");
   const [newOption, setNewOption] = useState<string>("");
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-
-  const toast = useToast();
-  const showSuccessToast = () => {
-    const newId = Math.random().toString();
-    setToastId(newId);
-    toast.show({
-      id: newId,
-      placement: "top",
-      duration: 3000,
-      render: ({ id }) => {
-        const uniqueToastId = "toast-" + id;
-        return (
-          <Toast nativeID={uniqueToastId} action="muted" variant="solid">
-            <ToastTitle>OK</ToastTitle>
-            <ToastDescription>
-              Producto agregado correctamente!
-            </ToastDescription>
-          </Toast>
-        );
-      },
-    });
+  const succesToastRef = useRef<SimpleToastRef>(null);
+  const showSuccessToast = (message: string, headerMsg: string) => {
+    succesToastRef.current?.show(message, headerMsg);
   };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Heading style={styles.heading} size="xl">
@@ -117,29 +70,15 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
             />
           ) : item.type === "option" ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Select
-                selectedValue={filters[item.name] || ""}
-                onValueChange={(value) => handleFilterChange(item.name, value)}
-                style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
-              >
-                <SelectTrigger variant="outline" size="xl">
-                  <SelectInput placeholder={item.name} />
-                  <SelectIcon className="mr-3" as={ChevronDownIcon} />
-                </SelectTrigger>
-                <SelectPortal>
-                  <SelectBackdrop />
-                  <SelectContent>
-                    <SelectDragIndicatorWrapper>
-                      <SelectDragIndicator />
-                    </SelectDragIndicatorWrapper>
-                    {item.options?.map((opt, i) => (
-                      <SelectItem label={opt} key={i} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </SelectPortal>
-              </Select>
+              <FieldSelect
+                placeholder={item.name}
+                value={filters[item.name] || ""}
+                handleChange={(value) => handleFilterChange(item.name, value)}
+                options={(item.options ?? []).map((opt) => ({
+                  label: opt,
+                  value: opt,
+                }))}
+              />
               <Button
                 size="sm"
                 style={{
@@ -161,62 +100,24 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
           size="xl"
           className="rounded-full p-3.5"
           style={[styles.roundBtn]}
-          onPress={showSuccessToast}
+          onPress={() => { showSuccessToast("Producto agregado correctamente!", "OK"); }}
         >
           <ButtonIcon as={AddIcon} size="xl" />
           <Text style={styles.labelBtn}>Agregar</Text>
         </Button>
       </View>
-      <Modal
-        isOpen={showModalAdd}
-        onClose={() => {
+      <ModalAddEdit
+        show={showModalAdd}
+        onCloseClick={() => setShowModalAdd(false)}
+        onConfirm={(value) => {
+          setNewOption(value);
           setShowModalAdd(false);
+          showSuccessToast("Producto agregado correctamente!", "OK");
         }}
-        size="md"
-      >
-        <ModalBackdrop />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="md" className="text-typography-950">
-              Agregar nueva opción
-            </Heading>
-            <ModalCloseButton>
-              <Icon
-                as={CloseIcon}
-                size="md"
-                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
-              />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-            <Input variant="outline" size="xl">
-              <InputField
-                placeholder="Nombre del item"
-                value={newOption}
-                onChangeText={setNewOption}
-              />
-            </Input>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={() => {
-                setShowModalAdd(false);
-              }}
-            >
-              <ButtonText>Cancelar</ButtonText>
-            </Button>
-            <Button
-              onPress={() => {
-                setShowModalAdd(false);
-              }}
-            >
-              <ButtonText>Agregar</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        value={newOption}
+        onChangeValue={setNewOption}
+      />
+      <SimpleToast ref={succesToastRef} />
     </ScrollView>
   );
 };
