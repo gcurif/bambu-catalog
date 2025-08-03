@@ -4,12 +4,10 @@ import React, { useRef, useState } from "react";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
-import {
-  AddIcon
-} from "@/components/ui/icon";
+import { AddIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Field from "./common/Field";
 import FieldSelect from "./common/FieldSelect";
 import ModalAddEdit from "./common/ModalAddEdit";
@@ -39,6 +37,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
   const showSuccessToast = (message: string, headerMsg: string) => {
     succesToastRef.current?.show(message, headerMsg);
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Heading style={styles.heading} size="xl">
@@ -86,13 +85,14 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
           ) : null}
         </View>
       ))}
-      {/* Botones */}
       <View style={styles.buttonsContainer}>
         <Button
           size="xl"
           className="rounded-full p-3.5"
-          style={[styles.roundBtn]}
-          onPress={() => { showSuccessToast("Producto agregado correctamente!", "OK"); }}
+          style={styles.roundBtn}
+          onPress={() => {
+            showSuccessToast("Producto agregado correctamente!", "OK");
+          }}
         >
           <ButtonIcon as={AddIcon} size="xl" />
           <Text style={styles.labelBtn}>Agregar</Text>
@@ -118,45 +118,15 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  searchBar: {
-    marginBottom: 8,
-    backgroundColor: "rgba(255, 255, 255, 1)",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginBottom: 16,
-  },
-  searchInput: {
-    flex: 1,
-    paddingVertical: Platform.OS === "ios" ? 12 : 8,
-  },
-  icon: {
-    marginHorizontal: 8,
-  },
   filterContainer: {
     marginBottom: 8,
     display: "flex",
     flexDirection: "column",
   },
-  label: {
-    marginBottom: 4,
-    fontWeight: "bold",
-  },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 24,
-  },
-  searchBtn: {
-    backgroundColor: "green",
-  },
-  labelInput: {
-    marginBottom: 8,
-    fontWeight: "bold",
   },
   labelBtn: {
     color: "#fff",

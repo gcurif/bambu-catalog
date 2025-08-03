@@ -4,7 +4,7 @@ import { Text } from "@/components/ui/text";
 import { FilterSchemaItem } from "@/model/schema";
 import React, { useState } from "react";
 
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import FieldSelect from "./common/FieldSelect";
 import ModalAddEdit from "./common/ModalAddEdit";
 import ModalDelete from "./common/ModalDelete";
@@ -135,80 +135,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  searchBar: {
-    marginBottom: 8,
-  },
-  picker: {
-    height: 48,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginBottom: 16,
-  },
-  searchInput: {
-    flex: 1,
-    paddingVertical: Platform.OS === "ios" ? 12 : 8,
-  },
-  icon: {
-    marginHorizontal: 8,
-  },
   filterContainer: {
     marginBottom: 8,
     display: "flex",
     flexDirection: "column",
   },
-  label: {
-    marginBottom: 4,
-    fontWeight: "bold",
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-  },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 24,
-  },
-  circleButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    borderWidth: 1,
-    color: "#fff",
-  },
-  searchBtn: {
-    backgroundColor: "green",
-  },
-  labelInput: {
-    marginBottom: 8,
-    fontWeight: "bold",
-  },
-  labelBtn: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
   heading: {
     marginBottom: 16,
-  },
-  roundBtn: {
-    width: 100,
-    height: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#fff",
-    display: "flex",
-    flexDirection: "column",
   },
 });
