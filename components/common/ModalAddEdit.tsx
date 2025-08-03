@@ -2,13 +2,13 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { CloseIcon, Icon } from "@/components/ui/icon";
 import {
-    Modal,
-    ModalBackdrop,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@/components/ui/modal";
 import React from "react";
 import Field from "./Field";
@@ -66,7 +66,7 @@ const ModalAddEdit = ({
           <Field
             placeholder={inputPlaceHolder}
             value={value}
-            handleChange={onChangeValueInternal}
+            onChange={onChangeValueInternal}
             type="text"
           />
         </ModalBody>

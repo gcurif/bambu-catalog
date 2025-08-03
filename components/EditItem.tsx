@@ -1,33 +1,13 @@
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { ChevronDownIcon, CloseIcon, Icon } from "@/components/ui/icon";
-import { Input, InputField } from "@/components/ui/input";
-import {
-  Modal,
-  ModalBackdrop,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@/components/ui/modal";
-import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-} from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
 import { FilterSchemaItem } from "@/model/schema";
 import React, { useState } from "react";
 
 import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import FieldSelect from "./common/FieldSelect";
+import ModalAddEdit from "./common/ModalAddEdit";
+import ModalDelete from "./common/ModalDelete";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
@@ -42,8 +22,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [showModalAdd, setShowModalAdd] = useState(false);
-  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [showModalAddEdit, setShowModalAddEdit] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [valueToEdit, setValueToEdit] = useState<string>("");
 
@@ -73,29 +52,15 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                 marginTop: 16,
               }}
             >
-              <Select
-                selectedValue={filters[item.name] || ""}
-                onValueChange={(value) => handleFilterChange(item.name, value)}
-                style={{ flex: 1, width: "100%", backgroundColor: "white" }}
-              >
-                <SelectTrigger variant="outline" size="xl">
-                  <SelectInput placeholder={item.name} />
-                  <SelectIcon className="mr-3" as={ChevronDownIcon} />
-                </SelectTrigger>
-                <SelectPortal>
-                  <SelectBackdrop />
-                  <SelectContent>
-                    <SelectDragIndicatorWrapper>
-                      <SelectDragIndicator />
-                    </SelectDragIndicatorWrapper>
-                    {item.options?.map((opt, i) => (
-                      <SelectItem label={opt} key={i} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </SelectPortal>
-              </Select>
+              <FieldSelect
+                placeholder={item.name}
+                value={filters[item.name] || ""}
+                handleChange={(value) => handleFilterChange(item.name, value)}
+                options={(item.options ?? []).map((opt) => ({
+                  label: opt,
+                  value: opt,
+                }))}
+              />
               <View
                 style={{
                   flexDirection: "row",
@@ -108,7 +73,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                   size="lg"
                   style={{ marginRight: 4, flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
                   onPress={() => {
-                    setShowModalAdd(true);
+                    setShowModalAddEdit(true);
                   }}
                   variant="outline"
                 >
@@ -118,7 +83,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                   size="lg"
                   style={{ marginRight: 4, flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
                   onPress={() => {
-                    setShowModalEdit(true);
+                    setShowModalAddEdit(true);
                     setValueToEdit(filters[item.name]);
                   }}
                   variant="outline"
@@ -140,143 +105,28 @@ export const EditItem: React.FC<SearchEngineProps> = ({
           ) : null}
         </View>
       ))}
-      <Modal
-        isOpen={showModalAdd}
-        onClose={() => {
-          setShowModalAdd(false);
+      <ModalAddEdit
+        show={showModalAddEdit}
+        onCloseClick={() => setShowModalAddEdit(false)}
+        onConfirm={(value) => {
+          setFilters((prev) => ({ ...prev, [value]: value }));
+          setShowModalAddEdit(false);
         }}
-        size="md"
-      >
-        <ModalBackdrop />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="md" className="text-typography-950">
-              Agregar nueva opción
-            </Heading>
-            <ModalCloseButton>
-              <Icon
-                as={CloseIcon}
-                size="md"
-                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
-              />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-            <Input variant="outline" size="xl">
-              <InputField placeholder="Nombre del item" />
-            </Input>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={() => {
-                setShowModalAdd(false);
-              }}
-            >
-              <ButtonText>Cancelar</ButtonText>
-            </Button>
-            <Button
-              onPress={() => {
-                setShowModalAdd(false);
-              }}
-            >
-              <ButtonText>Agregar</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      <Modal
-        isOpen={showModalEdit}
-        onClose={() => {
-          setShowModalEdit(false);
-        }}
-        size="md"
-      >
-        <ModalBackdrop />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="md" className="text-typography-950">
-              Editar opción
-            </Heading>
-            <ModalCloseButton>
-              <Icon
-                as={CloseIcon}
-                size="md"
-                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
-              />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-            <Input variant="outline" size="xl">
-              <InputField
-                placeholder="Nombre del item"
-                value={valueToEdit}
-                onChangeText={setValueToEdit}
-              />
-            </Input>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={() => {
-                setShowModalEdit(false);
-              }}
-            >
-              <ButtonText>Cancelar</ButtonText>
-            </Button>
-            <Button
-              onPress={() => {
-                setShowModalEdit(false);
-              }}
-            >
-              <ButtonText>Guardar</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      <Modal
-        isOpen={showModalDelete}
-        onClose={() => {
+        value=""
+        onChangeValue={() => {}}
+      />
+      <ModalDelete
+        show={showModalDelete}
+        onCloseClick={() => setShowModalDelete(false)}
+        onConfirm={() => {
+          setFilters((prev) => {
+            const newFilters = { ...prev };
+            delete newFilters[valueToEdit];
+            return newFilters;
+          });
           setShowModalDelete(false);
         }}
-        size="md"
-      >
-        <ModalBackdrop />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="md" className="text-typography-950">
-              ¿Esta seguro que desea eliminar esta opción?
-            </Heading>
-            <ModalCloseButton>
-              <Icon
-                as={CloseIcon}
-                size="md"
-                className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
-              />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={() => {
-                setShowModalDelete(false);
-              }}
-            >
-              <ButtonText>Volver</ButtonText>
-            </Button>
-            <Button
-              onPress={() => {
-                setShowModalDelete(false);
-              }}
-            >
-              <ButtonText>Eliminar</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      />
     </ScrollView>
   );
 };
