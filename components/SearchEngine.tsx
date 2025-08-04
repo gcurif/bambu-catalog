@@ -51,7 +51,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
         onChange={(value) => handleFilterChange("code", value)}
         type="text"
       />
-      <Divider className="mt-0.5 mb-3" />
+      <Divider className="mt-3 mb-3" />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (

@@ -34,7 +34,7 @@ export default function TabTwoScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={GlobalStyles.container}>
+    <ScrollView style={GlobalStyles.containerScrollable}>
       <SearchEngine
         schema={schema}
         onSearch={handleSearch}

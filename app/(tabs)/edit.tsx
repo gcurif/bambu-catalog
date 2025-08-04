@@ -11,7 +11,6 @@ export default function HomeScreen() {
       <EditItem
         schema={schema}
         onSearch={(term, filters) => console.log(term, filters)}
-        onClear={() => console.log('limpiar')}
       />
     </View>
   );

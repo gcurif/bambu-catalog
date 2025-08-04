@@ -1,36 +1,49 @@
+import { Button } from "@/components/ui/button";
+import { GlobalStyles } from "@/constants/GlobalStyles";
 import React from "react";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 
-const ItemDetail: React.FC<{ item: { name: string; code: string; img: string; properties: { name: string; value: string; order: number; }[]; } }> = ({ item }) => {
-
+const ItemDetail: React.FC<{
+  item: {
+    name: string;
+    code: string;
+    img: string;
+    properties: { name: string; value: string; order: number }[];
+  };
+}> = ({ item }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{item.name}</Text>
       <Text style={styles.code}>Código: {item.code}</Text>
-      <View style={styles.imageContainer}>
-        {item.img ? (
-          /*<Image
+      <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+        <View style={styles.imageContainer}>
+          {item.img ? (
+            /*<Image
             source={{ uri: item.img }}
             style={{ width: 250, height: 250 }}
           />*/
-          <Image
-            source={require("@/assets/images/default.jpg")}
-            style={{ width: 250, height: 250 }}
-          />          
-        ) : (
-          <Image
-            source={require("@/assets/images/default.jpg")}
-            style={{ width: 250, height: 250 }}
-          />
-        )}
+            <Image
+              source={require("@/assets/images/default.jpg")}
+              style={{ width: 200, height: 200 }}
+            />
+          ) : (
+            <Image
+              source={require("@/assets/images/default.jpg")}
+              style={{ width: 200, height: 200 }}
+            />
+          )}
+        </View>
+        <View style={styles.detailsContainer}>
+          {item.properties.map((property, index) => (
+            <Text key={index} style={styles.detailText}>
+              {property.name}: {property.value}
+            </Text>
+          ))}
+        </View>
       </View>
-      <View style={styles.detailsContainer}>
-        {item.properties.map((property, index) => (
-          <Text key={index} style={styles.detailText}>
-            {property.name}: {property.value}
-          </Text>
-        ))}
-      </View>
+      <Button size="xl" className="p-3.5 mt-4" style={{width: 200}}>
+        <Text style={GlobalStyles.buttonText}>Ver Imagenes</Text>
+      </Button>
     </View>
   );
 };
@@ -65,14 +78,18 @@ const styles = StyleSheet.create({
   },
   code: {
     marginBottom: 4,
+    fontSize: 18,
   },
   detailText: {
     marginBottom: 4,
     flex: 1,
+    fontSize: 18,
+    fontWeight: 600,
   },
   imageContainer: {
     justifyContent: "center",
     marginTop: 8,
+    marginRight: 16,
   },
   detailsContainer: {
     display: "flex",

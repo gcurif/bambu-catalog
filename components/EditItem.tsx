@@ -12,15 +12,12 @@ import ModalDelete from "./common/ModalDelete";
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
   onSearch?: (searchTerm: string, filters: Record<string, string>) => void;
-  onClear?: () => void;
 }
 
 export const EditItem: React.FC<SearchEngineProps> = ({
   schema = [],
   onSearch,
-  onClear,
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showModalAddEdit, setShowModalAddEdit] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
@@ -28,12 +25,6 @@ export const EditItem: React.FC<SearchEngineProps> = ({
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleClear = () => {
-    setSearchTerm("");
-    setFilters({});
-    onClear?.();
   };
 
   return (

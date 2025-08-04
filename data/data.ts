@@ -12,6 +12,10 @@ const schema: FilterSchemaItem[] = [
     "options": ["modelo1", "modelo2", "modelo3", "modelo4", "modelo5", "modelo6"]
   },
   {
+    "name": "Compatibilidad",
+    "type": "text", 
+  },
+  {
     "name": "año",
     "type": "number"
   },
