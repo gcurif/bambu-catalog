@@ -1,9 +1,7 @@
 import { Menu, MenuItem, MenuItemLabel } from "@/components/ui/menu";
 import { Pressable } from "@/components/ui/pressable";
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, InputField } from "../ui/input";
-
 
 const FieldSelect = ({
   placeholder,
@@ -11,7 +9,6 @@ const FieldSelect = ({
   handleChange,
   options,
 }: FieldSelectProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <View>
       <Menu
@@ -21,7 +18,12 @@ const FieldSelect = ({
         trigger={({ ...triggerProps }) => {
           return (
             <Pressable {...triggerProps}>
-              <Input variant="outline" size="3xl" style={styles.input} {...triggerProps}>
+              <Input
+                variant="outline"
+                size="3xl"
+                style={styles.input}
+                {...triggerProps}
+              >
                 <InputField
                   placeholder={placeholder}
                   value={value}
@@ -38,10 +40,9 @@ const FieldSelect = ({
             textValue={option.value}
             onPress={() => {
               handleChange?.(option.value);
-              setIsOpen(false);
             }}
           >
-            <MenuItemLabel size="xl">{option.label}</MenuItemLabel>
+            <MenuItemLabel size="3xl">{option.label}</MenuItemLabel>
           </MenuItem>
         ))}
       </Menu>
@@ -63,8 +64,6 @@ type FieldSelectProps = {
 
 const styles = StyleSheet.create({
   picker: {
-    marginVertical: 8,
-    backgroundColor: "rgba(255, 255, 255, 1)",
     fontSize: 28,
   },
   input: {
