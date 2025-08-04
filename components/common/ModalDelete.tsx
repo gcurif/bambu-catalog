@@ -1,10 +1,10 @@
 import {
-    Modal,
-    ModalBackdrop,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader
+  Modal,
+  ModalBackdrop,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader
 } from "@/components/ui/modal";
 import { Button, ButtonText } from "../ui/button";
 import { Heading } from "../ui/heading";
@@ -21,20 +21,10 @@ const ModalDelete = ({
   onCloseClick,
   onConfirm
 }: ModalDeleteProps) => {
-    const onConfirmInternal = () => {
-        if (onConfirm) {
-        onConfirm();
-        }
-    };
-    const onCloseInternal = () => {
-        if (onCloseClick) {
-        onCloseClick();
-        }
-    };
     return (
       <Modal
         isOpen={show}
-        onClose={onCloseInternal}
+        onClose={() => onCloseClick?.()}
         size="md"
       >
         <ModalBackdrop />
@@ -55,12 +45,12 @@ const ModalDelete = ({
             <Button
               variant="outline"
               action="secondary"
-              onPress={onCloseInternal}
+              onPress={() => onCloseClick?.()}
             >
               <ButtonText>Volver</ButtonText>
             </Button>
             <Button
-              onPress={onConfirmInternal}
+              onPress={() => onConfirm?.()}
             >
               <ButtonText>Eliminar</ButtonText>
             </Button>

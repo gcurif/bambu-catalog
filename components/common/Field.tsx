@@ -1,5 +1,6 @@
 import { Input, InputField } from "@/components/ui/input";
 import React from 'react';
+import { StyleSheet } from "react-native";
 
 type FieldProps = {
   placeholder: string | undefined;
@@ -15,35 +16,42 @@ const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type }) => 
       return (trimmed === "" || /^-?\d+(\.\d+)?$/.test(trimmed));
     };
 
-    const handleInternalChange = (value: string) => {
-      if (onChange) {
-        onChange(value);
-      }
-    };
-
     const handleNumberChange = (value: string) => {
       if (validateNumber(value)) {
-        handleInternalChange(value);
+        onChange?.(value);
       }
     };
 
     return (
             <Input
               variant="outline"
-              size="xl"
-              style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
+              size="3xl"
+              style={styles.input}
             >
               <InputField
                 placeholder={placeholder}
                 value={value}
                 onChangeText={(value) =>
                   type === "number"
-                    ? handleInternalChange(value)
-                    : handleNumberChange(value)
+                    ? handleNumberChange(value)
+                    : onChange?.(value)
                 }
               />
             </Input>
     );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    borderColor: "rgba(217, 235, 255, 1)",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 8,
+    fontSize: 16,
+    color: "#000",
+  }
+});
+
 
 export default Field;

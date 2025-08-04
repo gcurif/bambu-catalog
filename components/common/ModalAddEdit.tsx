@@ -22,32 +22,8 @@ const ModalAddEdit = ({
   onCloseClick,
   show,
 }: ModalAddEditProps) => {
-  const onChangeValueInternal = (newValue: string) => {
-    if (onChangeValue) {
-      onChangeValue(newValue);
-    }
-  };
-
-  const onConfirmInternal = (newValue: string) => {
-    if (onConfirm) {
-      onConfirm(newValue);
-    }
-  };
-
-  const oncloseInternal = () => {
-    if (onCloseClick) {
-      onCloseClick();
-    }
-  };
-
-  const onCanelInternal = () => {
-    if (onCancel) {
-      onCancel();
-    }
-  };
-
   return (
-    <Modal isOpen={show} onClose={oncloseInternal} size="md">
+    <Modal isOpen={show} onClose={() => onCloseClick?.()} size="md">
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
@@ -66,7 +42,7 @@ const ModalAddEdit = ({
           <Field
             placeholder={inputPlaceHolder}
             value={value}
-            onChange={onChangeValueInternal}
+            onChange={() => onChangeValue?.(value)}
             type="text"
           />
         </ModalBody>
@@ -75,12 +51,12 @@ const ModalAddEdit = ({
             variant="outline"
             action="secondary"
             onPress={() => {
-              onCanelInternal();
+              onCancel?.();
             }}
           >
             <ButtonText>Cancelar</ButtonText>
           </Button>
-          <Button onPress={() => onConfirmInternal(value)}>
+          <Button onPress={() => onConfirm?.(value)}>
             <ButtonText>Agregar</ButtonText>
           </Button>
         </ModalFooter>
