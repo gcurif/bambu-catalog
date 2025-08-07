@@ -34,15 +34,8 @@ export const EditItem: React.FC<SearchEngineProps> = ({
       </Heading>
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
-          {item.type === "text" || item.type === "number" ? null : item.type ===
-            "option" ? (
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: 16,
-              }}
-            >
+          {item.type === "option" && (
+            <View style={styles.optionContainer}>
               <FieldSelect
                 placeholder={item.name}
                 value={filters[item.name] || ""}
@@ -52,48 +45,37 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                   value: opt,
                 }))}
               />
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 8,
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                }}
-              >
+              <View style={styles.buttonGroup}>
                 <Button
                   size="lg"
-                  style={{ marginRight: 4, flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
-                  onPress={() => {
-                    setShowModalAddEdit(true);
-                  }}
+                  style={styles.button}
+                  onPress={() => setShowModalAddEdit(true)}
                   variant="outline"
                 >
-                  <Text>Agregar</Text>
+                  <Text style={styles.buttonText}>Agregar</Text>
                 </Button>
                 <Button
                   size="lg"
-                  style={{ marginRight: 4, flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
+                  style={styles.button}
                   onPress={() => {
                     setShowModalAddEdit(true);
                     setValueToEdit(filters[item.name]);
                   }}
                   variant="outline"
                 >
-                  <Text>Editar</Text>
+                  <Text style={styles.buttonText}>Editar</Text>
                 </Button>
                 <Button
                   size="lg"
-                  onPress={() => {
-                    setShowModalDelete(true);
-                  }}
+                  style={styles.button}
+                  onPress={() => setShowModalDelete(true)}
                   variant="outline"
-                  style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
                 >
-                  <Text>Eliminar</Text>
+                  <Text style={styles.buttonText}>Eliminar</Text>
                 </Button>
               </View>
             </View>
-          ) : null}
+          )}
         </View>
       ))}
       <ModalAddEdit
@@ -126,12 +108,35 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
+  heading: {
+    marginBottom: 16,
+  },
   filterContainer: {
     marginBottom: 8,
     display: "flex",
     flexDirection: "column",
   },
-  heading: {
-    marginBottom: 16,
+  optionContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: 16,
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    marginTop: 8,
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  button: {
+    flex: 1,
+    marginRight: 4,
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    height: 42,
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: "400",
+    color: "#333", // puedes ajustar esto según el tema
+    textAlign: "center",
   },
 });
