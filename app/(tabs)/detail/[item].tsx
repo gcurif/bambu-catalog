@@ -11,10 +11,18 @@ export const unstable_settings = {
 export default function DetalleUnidad() {
   const { item } = useLocalSearchParams();
 
-  const wHeight = Dimensions.get("window").height;
-  const wWidth = Dimensions.get("window").width;
+  const { height: wHeight, width: wWidth } = Dimensions.get("window");
 
   const imgLgHeight = wHeight / 3;
+
+  const marginLeft = 16;
+  const marginRight = 16;
+  const singleImgWidth = wWidth - marginLeft - marginRight;
+  const singleImgHeight = wHeight / 3;
+
+  const imgSep = 8;
+  const doubleImgWidth = (wWidth - marginLeft - marginRight - imgSep) / 2;
+  const doubleImgHeight = wHeight / 2.5;
 
   const imgs = [
     require("@/assets/images/detail/1.jpeg"),
@@ -22,37 +30,79 @@ export default function DetalleUnidad() {
     require("@/assets/images/detail/3.jpeg"),
     require("@/assets/images/detail/4.jpeg"),
     require("@/assets/images/detail/5.jpeg"),
+    require("@/assets/images/detail/6.jpeg"),
+    require("@/assets/images/detail/7.jpeg"),
+    require("@/assets/images/detail/8.jpeg"),
   ];
-;
   return (
     <ScrollView style={GlobalStyles.containerScrollable}>
-      <View className="justify-start" style={{ marginLeft: 16, marginRight: 16 }}>
+      <View
+        className="justify-start"
+        style={{ marginLeft: 16, marginRight: 16 }}
+      >
         <Heading size="3xl" className="mt-10 mb-4">
           Galeria
         </Heading>
-        <View className="mt-4">
-          <Image
-            source={imgs[0]}
-            style={{ width: wWidth - 32, height: imgLgHeight, resizeMode: "stretch" }}
-          />
-        </View>
-        <View className="flex-row mt-4">
-          <Image
-            source={imgs[3]}
-            style={{ width: wWidth*0.5-20, maxHeight: wHeight/2.5, resizeMode: "stretch" }}
-          />
-          <Image
-            source={imgs[4]}
-            style={{
-              width: wWidth*0.5-20,
-              marginLeft: 8,
-              maxHeight: wHeight/2.5,
-              resizeMode: "stretch",
-            }}
-          />
-        </View>
+        <SingleImgView
+          imgSrc={imgs[0]}
+          width={singleImgWidth}
+          height={singleImgHeight}
+        />
+        <DoubleImgView
+          imgSrc1={imgs[1]}
+          imgSrc2={imgs[2]}
+          width={doubleImgWidth}
+          height={doubleImgHeight}
+          imgSep={imgSep}
+        />
       </View>
       <Text style={{ display: "none" }}>Detalle de unidad: {item}</Text>
     </ScrollView>
   );
 }
+
+type SingleImgViewProps = {
+  imgSrc: any;
+  width: number;
+  height: number;
+};
+
+const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
+  return (
+    <View className="mt-4">
+      <Image
+        source={imgSrc}
+        style={{ width: width, height: height, resizeMode: "stretch" }}
+      />
+    </View>
+  );
+};
+
+type DoubleImgViewProps = {
+  imgSrc1: any;
+  imgSrc2: any;
+  width: number;
+  height: number;
+  imgSep?: number;
+};
+
+const DoubleImgView = ({
+  imgSrc1,
+  imgSrc2,
+  width,
+  height,
+  imgSep
+}: DoubleImgViewProps) => {
+  return (
+    <View className="mt-4 flex-row">
+      <Image
+        source={imgSrc1}
+        style={{ width: width, height: height, resizeMode: "stretch" }}
+      />
+      <Image
+        source={imgSrc2}
+        style={{ width: width, height: height, marginLeft: imgSep || 8, resizeMode: "stretch" }}
+      />
+    </View>
+  );
+};
