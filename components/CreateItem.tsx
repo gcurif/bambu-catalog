@@ -127,21 +127,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 24,
+    marginBottom: 200,
   },
   labelBtn: {
     color: "#fff",
-    fontWeight: "bold",
+    fontSize: 24,
   },
   heading: {
     marginBottom: 16,
   },
   roundBtn: {
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
     justifyContent: "center",
     alignItems: "center",
     color: "#fff",
     display: "flex",
     flexDirection: "column",
+  },
+  btnIcon: {
+    height: 32,
+    width: 32,
   },
 });

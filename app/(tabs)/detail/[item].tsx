@@ -10,11 +10,6 @@ import {
   View,
 } from "react-native";
 
-export const unstable_settings = {
-  // Esto hace que NO aparezca como un tab
-  initialRouteName: "index",
-};
-
 export default function DetalleUnidad() {
   const { item } = useLocalSearchParams();
 

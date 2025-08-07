@@ -15,7 +15,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarPosition: "bottom",
-        tabBarInactiveTintColor: '#f0f0f0ff',
+        tabBarInactiveTintColor: "#f0f0f0ff",
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
         tabBarButton: HapticTab,
@@ -27,7 +27,7 @@ export default function TabLayout() {
           },
           default: {
             height: 0,
-            backgroundColor: '#757b7eff',
+            backgroundColor: "#757b7eff",
           },
         }),
         tabBarLabelStyle: {
@@ -67,6 +67,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={32} name="edit.fill" color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        // Name of the route to hide.
+        name="detail"
+        options={{
+          // This tab will no longer show up in the tab bar.
+          href: null,
         }}
       />
     </Tabs>

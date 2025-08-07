@@ -81,7 +81,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
           style={[styles.roundBtn, { backgroundColor: "green" }]}
           onPress={onSearchClick}
         >
-          <ButtonIcon as={SearchIcon} size="xl" />
+          <ButtonIcon as={SearchIcon} size="xl" style={styles.btnIcon} />
           <Text style={styles.labelBtn}>Buscar</Text>
         </Button>
         <Button
@@ -90,7 +90,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
           style={[styles.roundBtn]}
           onPress={handleClear}
         >
-          <ButtonIcon as={TrashIcon} size="xl" />
+          <ButtonIcon as={TrashIcon} size="xl" style={styles.btnIcon} />
           <Text style={styles.labelBtn}>Limpiar</Text>
         </Button>
       </View>
@@ -114,18 +114,22 @@ const styles = StyleSheet.create({
   },
   labelBtn: {
     color: "#fff",
-    fontWeight: "bold",
+    fontSize: 24,
   },
   heading: {
     marginBottom: 16,
   },
   roundBtn: {
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
     justifyContent: "center",
     alignItems: "center",
     color: "#fff",
     display: "flex",
     flexDirection: "column",
+  },
+  btnIcon: {
+    height: 32,
+    width: 32,
   },
 });
