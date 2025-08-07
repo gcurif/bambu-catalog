@@ -34,7 +34,6 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   };
 
   const onSearchClick = () => {
-    console.log("Search clicked", filters);
     if (onSearch) {
       onSearch(filters);
     }
@@ -52,7 +51,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
         type="text"
       />
       <Divider className="mt-3 mb-3" />
-      {schema.map((item, index) => (
+      {schema.filter((item) => item.filterable).map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
             <Field

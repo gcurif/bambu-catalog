@@ -2,37 +2,64 @@ import { FilterSchemaItem } from "@/model/schema";
 
 const schema: FilterSchemaItem[] = [
   {
-    "name": "marca",
-    "type": "option",
-    "options": ["marca1", "marca2", "marca3", "marca4", "marca5", "marca6"]
+    name: "Marca",
+    type: "option",
+    options: ["marca1", "marca2", "marca3", "marca4", "marca5", "marca6"],
+    filterable: true,
   },
   {
-    "name": "modelo",
-    "type": "option",
-    "options": ["modelo1", "modelo2", "modelo3", "modelo4", "modelo5", "modelo6"]
+    name: "Modelo",
+    type: "option",
+    options: ["modelo1", "modelo2", "modelo3", "modelo4", "modelo5", "modelo6"],
+    filterable: true,
   },
   {
-    "name": "Compatibilidad",
-    "type": "text", 
+    name: "Compatibilidad",
+    type: "text",
+    filterable: true,
   },
   {
-    "name": "año",
-    "type": "number"
+    name: "Año",
+    type: "number",
+    filterable: true,
   },
   {
-    "name": "cilindrada",
-    "type": "text"
+    name: "Cilindrada",
+    type: "text",
+    filterable: true,
   },
   {
-    "name": "traccion",
-    "type": "option",
-    "options": ["delantera 4x2", "trasera 4x2", "4x4"]
+    name: "Tracción",
+    type: "option",
+    options: ["delantera 4x2", "trasera 4x2", "4x4"],
+    filterable: true,
   },
   {
-    "name": "combustible",
-    "type": "option",
-    "options": ["gasolina", "diésel", "híbrido", "eléctrico"]
-  }
+    name: "Combustible",
+    type: "option",
+    options: ["gasolina", "diésel", "híbrido", "eléctrico"],
+    filterable: true,
+  },
+  {
+    name: "Costo",
+    type: "number",
+    filterable: false,
+  },
+  {
+    name: "Seguro",
+    type: "number",
+    filterable: false,
+  },
+  {
+    name: "Flete",
+    type: "number",
+    filterable: false,
+  },
+  {
+    name: "valor CIF",
+    type: "number",
+    filterable: false,
+  },
 ];
 
 const items = [
@@ -77,7 +104,7 @@ const items = [
   },
   {
     name: "Modelo 4",
-    code: "JKL012", 
+    code: "JKL012",
     img: "https://example.com/image4.jpg",
     properties: [
       { name: "Marca", value: "Marca 4", order: 1 },

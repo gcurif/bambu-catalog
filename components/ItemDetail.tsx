@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { GlobalStyles } from "@/constants/GlobalStyles";
+import { router } from "expo-router";
 import React from "react";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 
@@ -41,7 +42,7 @@ const ItemDetail: React.FC<{
           ))}
         </View>
       </View>
-      <Button size="xl" className="p-3.5 mt-4" style={{width: 200}}>
+      <Button size="xl" className="p-3.5 mt-4" style={{width: 200}} onPress={() => {router.push('/(tabs)/detail/321321')}}>
         <Text style={GlobalStyles.buttonText}>Ver Imagenes</Text>
       </Button>
     </View>
