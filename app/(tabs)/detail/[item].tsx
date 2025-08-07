@@ -49,8 +49,25 @@ export default function DetalleUnidad() {
           height={singleImgHeight}
         />
         <DoubleImgView
-          imgSrc1={imgs[1]}
-          imgSrc2={imgs[2]}
+          imgSrc1={imgs[3]}
+          imgSrc2={imgs[4]}
+          width={doubleImgWidth}
+          height={doubleImgHeight}
+          imgSep={imgSep}
+        />
+        <SingleImgView
+          imgSrc={imgs[2]}
+          width={singleImgWidth}
+          height={singleImgHeight}
+        />
+        <SingleImgView
+          imgSrc={imgs[7]}
+          width={singleImgWidth}
+          height={singleImgHeight}
+        />
+        <DoubleImgView
+          imgSrc1={imgs[5]}
+          imgSrc2={imgs[6]}
           width={doubleImgWidth}
           height={doubleImgHeight}
           imgSep={imgSep}
@@ -91,7 +108,7 @@ const DoubleImgView = ({
   imgSrc2,
   width,
   height,
-  imgSep
+  imgSep,
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
@@ -101,7 +118,12 @@ const DoubleImgView = ({
       />
       <Image
         source={imgSrc2}
-        style={{ width: width, height: height, marginLeft: imgSep || 8, resizeMode: "stretch" }}
+        style={{
+          width: width,
+          height: height,
+          marginLeft: imgSep || 8,
+          resizeMode: "stretch",
+        }}
       />
     </View>
   );
