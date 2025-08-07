@@ -49,30 +49,43 @@ export default function DetalleUnidad() {
           imgSrc={imgs[0]}
           width={singleImgWidth}
           height={singleImgHeight}
+          imgId="0"
         />
         <DoubleImgView
           imgSrc1={imgs[3]}
           imgSrc2={imgs[4]}
+          imgId1="3"
+          imgId2="4"
           width={doubleImgWidth}
           height={doubleImgHeight}
           imgSep={imgSep}
         />
         <SingleImgView
-          imgSrc={imgs[2]}
+          imgSrc={imgs[1]}
           width={singleImgWidth}
           height={singleImgHeight}
+          imgId="1"
         />
         <SingleImgView
-          imgSrc={imgs[7]}
+          imgSrc={imgs[2]}
+          imgId="2"
           width={singleImgWidth}
           height={singleImgHeight}
         />
         <DoubleImgView
           imgSrc1={imgs[5]}
           imgSrc2={imgs[6]}
+          imgId1="5"
+          imgId2="6"
           width={doubleImgWidth}
           height={doubleImgHeight}
           imgSep={imgSep}
+        />
+        <SingleImgView
+          imgSrc={imgs[7]}
+          width={singleImgWidth}
+          height={singleImgHeight}
+          imgId="7"
         />
       </View>
       <Text style={{ display: "none" }}>Detalle de unidad: {item}</Text>
@@ -84,6 +97,7 @@ type SingleImgViewProps = {
   imgSrc: any;
   width: number;
   height: number;
+  imgId?: string;
 };
 
 type DoubleImgViewProps = {
@@ -92,12 +106,15 @@ type DoubleImgViewProps = {
   width: number;
   height: number;
   imgSep?: number;
+  imgId1?: string;
+  imgId2?: string;
+  
 };
 
-const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
+const SingleImgView = ({ imgSrc, width, height, imgId }: SingleImgViewProps) => {
   return (
     <View className="mt-4">
-      <Pressable onPress={() => router.push('/(tabs)/detail/img/1')}>
+      <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId}`)}>
         <Image
           source={imgSrc}
           style={{ width: width, height: height, resizeMode: "stretch" }}
@@ -110,19 +127,21 @@ const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
 const DoubleImgView = ({
   imgSrc1,
   imgSrc2,
+  imgId1,
+  imgId2,
   width,
   height,
   imgSep,
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
-      <Pressable onPress={() => router.push('/(tabs)/detail/img/1')}>
+      <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId1}`)}>
         <Image
           source={imgSrc1}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
-      <Pressable onPress={() => router.push('/(tabs)/detail/img/1')}>
+      <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId2}`)}>
         <Image
           source={imgSrc2}
           style={{
