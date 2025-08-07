@@ -60,7 +60,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
               type={item.type}
             />
           ) : item.type === "option" ? (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", width: "100%" }}>
               <FieldSelect
                 placeholder={item.name}
                 value={filters[item.name] || ""}

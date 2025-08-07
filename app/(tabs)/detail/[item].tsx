@@ -1,6 +1,6 @@
 import { Heading } from "@/components/ui/heading";
 import { GlobalStyles } from "@/constants/GlobalStyles";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   Dimensions,
   Image,
@@ -102,13 +102,10 @@ type DoubleImgViewProps = {
 const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
   return (
     <View className="mt-4">
-      <Pressable onPress={() => console.log("ke paza")}>
+      <Pressable onPress={() => router.push('/(tabs)/detail/img/1')}>
         <Image
           source={imgSrc}
           style={{ width: width, height: height, resizeMode: "stretch" }}
-          onProgress={(event) => {
-            console.log("Image loading progress:", event.nativeEvent.loaded);
-          }}
         />
       </Pressable>
     </View>
@@ -124,21 +121,23 @@ const DoubleImgView = ({
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
-      <Pressable onPress={() => console.log("ke paza")}>
+      <Pressable onPress={() => router.push('/(tabs)/detail/img/1')}>
         <Image
           source={imgSrc1}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
-      <Image
-        source={imgSrc2}
-        style={{
-          width: width,
-          height: height,
-          marginLeft: imgSep || 8,
-          resizeMode: "stretch",
-        }}
-      />
+      <Pressable onPress={() => router.push('/(tabs)/detail/img/1')}>
+        <Image
+          source={imgSrc2}
+          style={{
+            width: width,
+            height: height,
+            marginLeft: imgSep || 8,
+            resizeMode: "stretch",
+          }}
+        />
+      </Pressable>
     </View>
   );
 };

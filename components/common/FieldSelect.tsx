@@ -10,7 +10,7 @@ const FieldSelect = ({
   options,
 }: FieldSelectProps) => {
   return (
-    <View>
+    <View style={{ flex: 1, width: "100%" }}>
       <Menu
         placement="top"
         offset={5}

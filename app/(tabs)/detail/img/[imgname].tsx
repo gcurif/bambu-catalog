@@ -1,34 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { CloseIcon, Icon } from "@/components/ui/icon";
+import { router } from "expo-router";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import Zoom from "react-native-zoom-reanimated";
 import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource";
 
 const ImgZoom = () => {
   const img = require("@/assets/images/detail/1.jpeg");
+  const { height: wHeight, width: wWidth } = Dimensions.get("window");
   const { width, height } = resolveAssetSource(img);
-  const heightPercentage = (height / width) * 100;
+  const heightPercentage = (height / width) * wWidth;
 
   return (
     <View style={styles.container} className="items-start">
-      <Button>
-        <Text>adsfdsfsdsada</Text>
+      <Button className="ml-2 mt-2 mb-2" onPress={() => router.back()}>
+        <Text style={styles.text}>Volver</Text>
         <Icon
           as={CloseIcon}
           size="lg"
           className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
         />
       </Button>
-
-      <Image
-        source={img}
-        style={{
-          width: "100%",
-          height: heightPercentage + "%",
-          resizeMode: "contain",
-          alignSelf: "flex-start",
-        }}
-      />
+      <Zoom>
+        <Image
+          source={img}
+          style={{
+            width: wWidth,
+            height: heightPercentage,
+            resizeMode: "contain",
+            alignSelf: "flex-start",
+          }}
+        />
+      </Zoom>
     </View>
   );
 };
@@ -41,7 +45,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   text: {
-    fontSize: 24,
+    fontSize: 18,
+    color: "#fff",
   },
 });
 
