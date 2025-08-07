@@ -1,8 +1,14 @@
 import { Heading } from "@/components/ui/heading";
 import { GlobalStyles } from "@/constants/GlobalStyles";
 import { useLocalSearchParams } from "expo-router";
-import { Dimensions, Image, ScrollView, Text, View } from "react-native";
-import Zoom from 'react-native-zoom-reanimated';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export const unstable_settings = {
   // Esto hace que NO aparezca como un tab
@@ -96,12 +102,15 @@ type DoubleImgViewProps = {
 const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
   return (
     <View className="mt-4">
-      <Zoom>
+      <Pressable onPress={() => console.log("ke paza")}>
         <Image
           source={imgSrc}
           style={{ width: width, height: height, resizeMode: "stretch" }}
+          onProgress={(event) => {
+            console.log("Image loading progress:", event.nativeEvent.loaded);
+          }}
         />
-      </Zoom>
+      </Pressable>
     </View>
   );
 };
@@ -115,10 +124,12 @@ const DoubleImgView = ({
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
-      <Image
-        source={imgSrc1}
-        style={{ width: width, height: height, resizeMode: "stretch" }}
-      />
+      <Pressable onPress={() => console.log("ke paza")}>
+        <Image
+          source={imgSrc1}
+          style={{ width: width, height: height, resizeMode: "stretch" }}
+        />
+      </Pressable>
       <Image
         source={imgSrc2}
         style={{
