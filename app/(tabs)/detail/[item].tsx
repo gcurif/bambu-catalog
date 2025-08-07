@@ -2,6 +2,7 @@ import { Heading } from "@/components/ui/heading";
 import { GlobalStyles } from "@/constants/GlobalStyles";
 import { useLocalSearchParams } from "expo-router";
 import { Dimensions, Image, ScrollView, Text, View } from "react-native";
+import Zoom from 'react-native-zoom-reanimated';
 
 export const unstable_settings = {
   // Esto hace que NO aparezca como un tab
@@ -84,23 +85,25 @@ type SingleImgViewProps = {
   height: number;
 };
 
-const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
-  return (
-    <View className="mt-4">
-      <Image
-        source={imgSrc}
-        style={{ width: width, height: height, resizeMode: "stretch" }}
-      />
-    </View>
-  );
-};
-
 type DoubleImgViewProps = {
   imgSrc1: any;
   imgSrc2: any;
   width: number;
   height: number;
   imgSep?: number;
+};
+
+const SingleImgView = ({ imgSrc, width, height }: SingleImgViewProps) => {
+  return (
+    <View className="mt-4">
+      <Zoom>
+        <Image
+          source={imgSrc}
+          style={{ width: width, height: height, resizeMode: "stretch" }}
+        />
+      </Zoom>
+    </View>
+  );
 };
 
 const DoubleImgView = ({
