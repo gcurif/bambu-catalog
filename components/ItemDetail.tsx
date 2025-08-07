@@ -8,7 +8,7 @@ const ItemDetail: React.FC<{
   item: {
     name: string;
     code: string;
-    img: string;
+    img: any;
     properties: { name: string; value: string; order: number }[];
   };
 }> = ({ item }) => {
@@ -24,7 +24,7 @@ const ItemDetail: React.FC<{
             style={{ width: 250, height: 250 }}
           />*/
             <Image
-              source={require("@/assets/images/default.jpg")}
+              source={item.img}
               style={{ width: 200, height: 200 }}
             />
           ) : (

@@ -64,13 +64,13 @@ const schema: FilterSchemaItem[] = [
 
 const items = [
   {
-    name: "Modelo 1",
+    name: "Caja Hyundai accent cvt",
     code: "ABC123",
-    img: "https://example.com/image1.jpg",
+    img: require("@/assets/images/detail/6.jpeg"),
     properties: [
-      { name: "Marca", value: "Marca 1", order: 1 },
-      { name: "Modelo", value: "Modelo 1", order: 2 },
-      { name: "Año", value: "1990", order: 3 },
+      { name: "Marca", value: "Hyundai 1", order: 1 },
+      { name: "Modelo", value: "Caja Hyundai accent cvt", order: 2 },
+      { name: "Año", value: "Hyundai", order: 3 },
       { name: "Cilindrada", value: "432432", order: 4 },
       { name: "Color", value: "Rojo", order: 5 },
       { name: "Combustible", value: "Gasolina", order: 6 },
@@ -79,7 +79,6 @@ const items = [
   {
     name: "Modelo 2",
     code: "DEF456",
-    img: "https://example.com/image2.jpg",
     properties: [
       { name: "Marca", value: "Marca 2", order: 1 },
       { name: "Modelo", value: "Modelo 2", order: 2 },
@@ -92,7 +91,6 @@ const items = [
   {
     name: "Modelo 3",
     code: "GHI789",
-    img: "https://example.com/image3.jpg",
     properties: [
       { name: "Marca", value: "Marca 3", order: 1 },
       { name: "Modelo", value: "Modelo 3", order: 2 },
@@ -105,7 +103,6 @@ const items = [
   {
     name: "Modelo 4",
     code: "JKL012",
-    img: "https://example.com/image4.jpg",
     properties: [
       { name: "Marca", value: "Marca 4", order: 1 },
       { name: "Modelo", value: "Modelo 4", order: 2 },
