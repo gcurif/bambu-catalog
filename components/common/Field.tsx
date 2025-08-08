@@ -7,9 +7,10 @@ type FieldProps = {
   value: any;
   onChange: (value: any) => void;
   type: string;
+  styles?: StyleSheet.NamedStyles<any>;
 };
 
-const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type }) => {
+const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type, styles }) => {
 
     const validateNumber = (value: string) => {
       const trimmed = value.trim();
@@ -26,7 +27,7 @@ const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type }) => 
             <Input
               variant="outline"
               size="3xl"
-              style={styles.input}
+              style={[styles, stylesInternal.input]}
             >
               <InputField
                 placeholder={placeholder}
@@ -41,7 +42,7 @@ const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type }) => 
     );
 };
 
-const styles = StyleSheet.create({
+const stylesInternal = StyleSheet.create({
   input: {
     backgroundColor: "rgba(255, 255, 255, 1)",
     borderColor: "rgba(217, 235, 255, 1)",

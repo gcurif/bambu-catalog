@@ -1,15 +1,33 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/HapticTab";
+import Login from "@/components/Login";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
+const users = {
+  admin : {
+    name: "Admin",
+    pass: "123"
+  },
+  operador : {
+    name: "Operador",
+    pass: "123"
+  }
+}
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [user, setUser] = useState(users.admin);
+
+  if(!user){
+    return <Login onLogin={() => setUser(users.admin)}/>;  // Show login screen
+  }
+
 
   return (
     <Tabs
