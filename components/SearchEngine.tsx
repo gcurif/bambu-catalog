@@ -1,6 +1,5 @@
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
-import { Heading } from "@/components/ui/heading";
 import { SearchIcon, TrashIcon } from "@/components/ui/icon";
 
 import { Text } from "@/components/ui/text";
@@ -41,11 +40,8 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Heading style={styles.heading} size="xl">
-        Buscar
-      </Heading>
       <Field
-        placeholder="Busqueda por codigo"
+        placeholder="Codigo"
         value={filters.code || ""}
         onChange={(value) => handleFilterChange("code", value)}
         type="text"
@@ -55,7 +51,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
             <Field
-              placeholder={`Filtrar por: ${item.name}`}
+              placeholder={item.name}
               value={filters[item.name] || ""}
               onChange={(value) => handleFilterChange(item.name, value)}
               type={item.type}
@@ -77,21 +73,21 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
       <View style={styles.buttonsContainer}>
         <Button
           size="xl"
-          className="rounded-full p-3.5"
+          className="rounded-full p-2.5"
           style={[styles.roundBtn, { backgroundColor: "green" }]}
           onPress={onSearchClick}
         >
-          <ButtonIcon as={SearchIcon} size="xl" style={styles.btnIcon} />
           <Text style={styles.labelBtn}>Buscar</Text>
+          <ButtonIcon as={SearchIcon} size="xl" style={styles.btnIcon} />
         </Button>
         <Button
           size="xl"
-          className="rounded-full p-3.5"
-          style={[styles.roundBtn]}
+          className="rounded-full p-2.5"
+          style={[styles.roundCleanBtn]}
           onPress={handleClear}
         >
-          <ButtonIcon as={TrashIcon} size="xl" style={styles.btnIcon} />
-          <Text style={styles.labelBtn}>Limpiar</Text>
+          <Text style={styles.labelCleanBtn}>Limpiar</Text>
+          <ButtonIcon as={TrashIcon} size="xl" style={styles.btnCleanIcon} />
         </Button>
       </View>
     </ScrollView>
@@ -120,8 +116,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   roundBtn: {
-    width: 140,
-    height: 140,
+    width: 130,
+    height: 130,
     justifyContent: "center",
     alignItems: "center",
     color: "#fff",
@@ -131,5 +127,22 @@ const styles = StyleSheet.create({
   btnIcon: {
     height: 32,
     width: 32,
+  },
+  roundCleanBtn: {
+    width: 80,
+    height: 80,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column",
+  },
+  btnCleanIcon: {
+    height: 23,
+    width: 23,
+  },
+  labelCleanBtn: {
+    color: "#fff",
+    fontSize: 12,
   },
 });

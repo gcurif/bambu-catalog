@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
-    fontSize: 16,
+    fontSize: 15,
+    height: 68,
     color: "#000",
   },
 });
