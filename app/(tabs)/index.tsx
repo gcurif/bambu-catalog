@@ -1,6 +1,7 @@
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { AddIcon, EditIcon, SearchIcon } from "@/components/ui/icon";
 import { GlobalPresets } from "@/constants/GlobalStyles";
+import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -9,17 +10,17 @@ const MainMenu = () => (
     <OptionButton
       title="Busqueda"
       icon={SearchIcon}
-      onPress={() => console.log("Search pressed")}
+      onPress={() => router.push("/search")}
     />
     <OptionButton
       title="Agregar Nuevo"
       icon={AddIcon}
-      onPress={() => console.log("Profile pressed")}
+      onPress={() => router.push("/add")}
     />
     <OptionButton
       title="Editar Opciones"
       icon={EditIcon}
-      onPress={() => console.log("Help pressed")}
+      onPress={() => router.push("/edit")}
     />
 
     {/*
