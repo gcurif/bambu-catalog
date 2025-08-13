@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Field from "./common/Field";
 import FieldSelect from "./common/FieldSelect";
+import FieldTextArea from "./common/FieldTextArea";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
@@ -22,6 +23,7 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   onClear,
 }) => {
   const [filters, setFilters] = useState<Record<string, string>>({});
+  console.log('scg',schema);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -47,28 +49,52 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
         type="text"
       />
       <Divider className="mt-3 mb-3" />
-      {schema.filter((item) => item.filterable).map((item, index) => (
-        <View key={index} style={styles.filterContainer}>
-          {item.type === "text" || item.type === "number" ? (
-            <Field
-              placeholder={item.name}
-              value={filters[item.name] || ""}
-              onChange={(value) => handleFilterChange(item.name, value)}
-              type={item.type}
-            />
-          ) : item.type === "option" ? (
-            <FieldSelect
-              placeholder={item.name}
-              value={filters[item.name] || ""}
-              handleChange={(value) => handleFilterChange(item.name, value)}
-              options={(item.options ?? []).map((opt) => ({
-                label: opt,
-                value: opt,
-              }))}
-            />
-          ) : null}
-        </View>
-      ))}
+      {schema
+        .filter((item) => item.filterable)
+        .map((item, index) => (
+          <View key={index} style={styles.filterContainer}>
+            {(() => {
+              switch (item.type) {
+                case "text":
+                case "number":
+                  return (
+                    <Field
+                      placeholder={item.name}
+                      value={filters[item.name] || ""}
+                      onChange={(value) => handleFilterChange(item.name, value)}
+                      type={item.type}
+                    />
+                  );
+                case "option":
+                  return (
+                    <FieldSelect
+                      placeholder={item.name}
+                      value={filters[item.name] || ""}
+                      handleChange={(value) =>
+                        handleFilterChange(item.name, value)
+                      }
+                      options={(item.options ?? []).map((opt) => ({
+                        label: opt,
+                        value: opt,
+                      }))}
+                    />
+                  );
+                case "textlg":
+                  return (
+                    <FieldTextArea
+                      placeholder={item.name}
+                      value={filters[item.name] || ""}
+                      onChange={(value) => handleFilterChange(item.name, value)}
+                      type={item.type}
+                    />
+                  );
+
+                default:
+                  return null;
+              }
+            })()}
+          </View>
+        ))}
       {/* Botones */}
       <View style={styles.buttonsContainer}>
         <Button

@@ -5,11 +5,21 @@ import { SearchEngine } from "@/components/SearchEngine";
 import { Spinner } from "@/components/ui/spinner";
 import { GlobalStyles } from "@/constants/GlobalStyles";
 import { getItems, getSchema } from "@/data/data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import colors from "tailwindcss/colors";
 
 export default function TabTwoScreen() {
-  const schema = getSchema();
+
+  const [schema, setSchema] = useState<{ id: string }[]>();
+
+  useEffect(() => {
+    const fetchSchema = async () => {
+      const schemas = await getSchema();
+      setSchema(schemas);
+    };
+    fetchSchema();
+  }, []);
+  
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<
     {

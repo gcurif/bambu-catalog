@@ -3,10 +3,18 @@ import { View } from 'react-native';
 import { EditItem } from '@/components/EditItem';
 import { GlobalStyles } from '@/constants/GlobalStyles';
 import { getSchema } from '@/data/data';
+import { useEffect, useState } from 'react';
 
 export default function HomeScreen() {
-  const schema = getSchema();
-  return (
+  const [schema, setSchema] = useState<{ id: string }[]>();
+
+  useEffect(() => {
+    const fetchSchema = async () => {
+      const schemas = await getSchema();
+      setSchema(schemas);
+    };
+    fetchSchema();
+  }, []);  return (
     <View style={GlobalStyles.container}>
       <EditItem
         schema={schema}

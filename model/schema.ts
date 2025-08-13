@@ -1,4 +1,4 @@
-export type FilterType = 'text' | 'number' | 'option';
+export type FilterType = 'text' | 'number' | 'option' | 'textlg';
 
 export interface FilterSchemaItem {
   name: string;

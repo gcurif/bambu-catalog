@@ -2,7 +2,6 @@ import { FilterSchemaItem } from "@/model/schema";
 import React, { useRef, useState } from "react";
 
 import { Button, ButtonIcon } from "@/components/ui/button";
-import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { AddIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
@@ -43,13 +42,6 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
       <Heading style={styles.heading} size="xl">
         Agregar nuevo
       </Heading>
-      <Field
-        placeholder="Buscar"
-        value={searchTerm}
-        onChange={setSearchTerm}
-        type="text"
-      />
-      <Divider className="mt-3 mb-3" />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {item.type === "text" || item.type === "number" ? (
