@@ -22,7 +22,11 @@ const MainMenu = () => (
       icon={EditIcon}
       onPress={() => router.push("/edit")}
     />
-
+    <OptionButton
+      title="Cambiar Usuario"
+      icon={EditIcon}
+      onPress={() => router.push("/edit")}
+    />
     {/*
           {
     <OptionButton

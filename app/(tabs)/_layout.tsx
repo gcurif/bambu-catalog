@@ -5,6 +5,7 @@ import Login from "@/components/Login";
 import { Fab, FabIcon, FabLabel } from "@/components/ui/fab";
 import { ArrowLeftIcon } from "@/components/ui/icon";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { User } from "@/model/schema";
 
 const users = {
   admin: {
@@ -17,15 +18,21 @@ const users = {
   },
 };
 
+const LOGIN_STATUS = {
+  loggedIn: 1,
+  loggedOut: 2,
+};
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const [user, setUser] = useState(users.admin);
   const pathname = usePathname();
 
-  if (!user) {
+  const [loginStatus, setLoginStatus] = useState(LOGIN_STATUS.loggedOut);
+
+  if (loginStatus === LOGIN_STATUS.loggedOut) {
     return (
       <>
-        <Login onLogin={() => setUser(users.admin)} />
+        <Login onLogin={(user : User) => setLoginStatus(user ? LOGIN_STATUS.loggedIn : LOGIN_STATUS.loggedOut)} />
       </>
     );
   }

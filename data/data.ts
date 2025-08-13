@@ -1,4 +1,5 @@
 // lib/firebase.ts
+import { User } from "@/model/schema";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -9,8 +10,12 @@ import {
 import {
   collection,
   getDocs,
-  getFirestore
+  getFirestore,
+  limit,
+  query,
+  where
 } from "firebase/firestore";
+import { verifyPassword } from "./crypt";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0XeO-uTg2bVnfXVqvOCq9yfhVAdNGCn4",
@@ -78,10 +83,28 @@ export const getSchema = withAuth(async () => {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 });
 
-// Inicializar Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-// const auth = getAuth(app);
+export const getUser = withAuth(async (user): Promise<User[]> => {
+
+  const usersCollection = collection(db, "users");
+  const q = query(usersCollection, where("username", "==", user), limit(1));
+
+  const snap = await getDocs(q);
+
+  console.log("Users fetched:", snap.docs.map((d) => (d.data())));
+  return snap.docs.map((d) => (d.data() as User));
+});
+
+export const getUserByUsrNameAndPass = withAuth(async (username: string, password: string) => {
+  const users : User[] = await getUser(username);
+  if (!users || users.length === 0) return null;
+  const valid = await verifyPassword(password, users[0].password);
+  if (!valid) return null;
+  return users[0];
+});
+  // Inicializar Firebase
+  // const app = initializeApp(firebaseConfig);
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
 
 const items  = [
   {
