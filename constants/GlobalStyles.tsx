@@ -2,6 +2,10 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const backgroundColor = "rgba(217, 235, 255, 1)";
 
+export const GlobalPresets = {
+  backgroundColor
+}
+
 
 export const GlobalStyles = StyleSheet.create({
   container: {
@@ -21,3 +25,4 @@ export const GlobalStyles = StyleSheet.create({
     fontWeight: "bold",
   }
 });
+
