@@ -25,6 +25,7 @@ export interface User {
 }
 
 export interface Item {
+  id?: string; // Optional for new items
   name: string;
   code: string;
   imgs: any[];

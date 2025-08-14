@@ -1,19 +1,30 @@
+import Loading from "@/components/common/Loading";
 import { Heading } from "@/components/ui/heading";
 import { GlobalStyles } from "@/constants/GlobalStyles";
+import { findItemById } from "@/data/data";
+import { Item } from "@/model/schema";
 import { router, useLocalSearchParams } from "expo-router";
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { Dimensions, Image, Pressable, ScrollView, View } from "react-native";
 
 export default function DetalleUnidad() {
-  const { item } = useLocalSearchParams();
+  const { item: itemId } = useLocalSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [item, setItem] = useState<Item | null>(null);
 
   const { height: wHeight, width: wWidth } = Dimensions.get("window");
+  useEffect(() => {
+
+    findItemById(itemId as string).then((item) => {
+      console.log("Item:", item)
+      if (!item) {
+        console.error("Item not found:", itemId)
+        return;
+      }
+      console.log("Item found:", item);
+      setLoading(false);
+    });
+  }, []);
 
   const imgLgHeight = wHeight / 3;
 
@@ -38,57 +49,60 @@ export default function DetalleUnidad() {
   ];
   return (
     <ScrollView style={GlobalStyles.containerScrollable}>
-      <View
-        className="justify-start"
-        style={{ marginLeft: 16, marginRight: 16 }}
-      >
-        <Heading size="3xl" className="mt-10 mb-4">
-          Galeria
-        </Heading>
-        <SingleImgView
-          imgSrc={imgs[0]}
-          width={singleImgWidth}
-          height={singleImgHeight}
-          imgId="0"
-        />
-        <DoubleImgView
-          imgSrc1={imgs[3]}
-          imgSrc2={imgs[4]}
-          imgId1="3"
-          imgId2="4"
-          width={doubleImgWidth}
-          height={doubleImgHeight}
-          imgSep={imgSep}
-        />
-        <SingleImgView
-          imgSrc={imgs[1]}
-          width={singleImgWidth}
-          height={singleImgHeight}
-          imgId="1"
-        />
-        <SingleImgView
-          imgSrc={imgs[2]}
-          imgId="2"
-          width={singleImgWidth}
-          height={singleImgHeight}
-        />
-        <DoubleImgView
-          imgSrc1={imgs[5]}
-          imgSrc2={imgs[6]}
-          imgId1="5"
-          imgId2="6"
-          width={doubleImgWidth}
-          height={doubleImgHeight}
-          imgSep={imgSep}
-        />
-        <SingleImgView
-          imgSrc={imgs[7]}
-          width={singleImgWidth}
-          height={singleImgHeight}
-          imgId="7"
-        />
-      </View>
-      <Text style={{ display: "none" }}>Detalle de unidad: {item}</Text>
+      {loading ? (
+        <Loading label="Cargando..." show={loading} />
+      ) : (
+        <View
+          className="justify-start"
+          style={{ marginLeft: 16, marginRight: 16 }}
+        >
+          <Heading size="3xl" className="mt-10 mb-4">
+            Galeria
+          </Heading>
+          <SingleImgView
+            imgSrc={imgs[0]}
+            width={singleImgWidth}
+            height={singleImgHeight}
+            imgId="0"
+          />
+          <DoubleImgView
+            imgSrc1={imgs[3]}
+            imgSrc2={imgs[4]}
+            imgId1="3"
+            imgId2="4"
+            width={doubleImgWidth}
+            height={doubleImgHeight}
+            imgSep={imgSep}
+          />
+          <SingleImgView
+            imgSrc={imgs[1]}
+            width={singleImgWidth}
+            height={singleImgHeight}
+            imgId="1"
+          />
+          <SingleImgView
+            imgSrc={imgs[2]}
+            imgId="2"
+            width={singleImgWidth}
+            height={singleImgHeight}
+          />
+          <DoubleImgView
+            imgSrc1={imgs[5]}
+            imgSrc2={imgs[6]}
+            imgId1="5"
+            imgId2="6"
+            width={doubleImgWidth}
+            height={doubleImgHeight}
+            imgSep={imgSep}
+          />
+          <SingleImgView
+            imgSrc={imgs[7]}
+            width={singleImgWidth}
+            height={singleImgHeight}
+            imgId="7"
+          />
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -108,10 +122,14 @@ type DoubleImgViewProps = {
   imgSep?: number;
   imgId1?: string;
   imgId2?: string;
-  
 };
 
-const SingleImgView = ({ imgSrc, width, height, imgId }: SingleImgViewProps) => {
+const SingleImgView = ({
+  imgSrc,
+  width,
+  height,
+  imgId,
+}: SingleImgViewProps) => {
   return (
     <View className="mt-4">
       <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId}`)}>

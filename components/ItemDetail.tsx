@@ -5,13 +5,13 @@ import { router } from "expo-router";
 import React from "react";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { Divider } from "./ui/divider";
+import { Pressable } from "./ui/pressable";
 
 const ItemDetail: React.FC<{
   item: Item;
   schema: FilterSchemaItem[] | undefined;
 }> = ({ item, schema = [] }) => {
 
-  console.log('item',item);
   const img = item.imgs && item.imgs.length > 0 ? item.imgs[0] : null;
   const schemaToShow = schema?.sort((a, b) => a.orderToShow! - b.orderToShow!);
 
@@ -22,11 +22,9 @@ const ItemDetail: React.FC<{
       <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
         <View style={styles.imageContainer}>
           {img ? (
-            /*<Image
-            source={{ uri: item.img }}
-            style={{ width: 250, height: 250 }}
-          />*/
-            <Image source={img.publicUrl} style={{ width: 200, height: 200 }} />
+            <Pressable onPress={() => router.push(`/(tabs)/detail/${item.id}`)}>
+              <Image source={img.publicUrl} style={{ width: 200, height: 200 }} />
+            </Pressable>
           ) : (
             <Image
               source={require("@/assets/images/default.jpg")}
@@ -50,7 +48,7 @@ const ItemDetail: React.FC<{
         className="p-3.5 mt-4"
         style={{ width: 200 }}
         onPress={() => {
-          router.push("/(tabs)/detail/321321");
+          router.push(`/(tabs)/detail/${item.id}`);
         }}
       >
         <Text style={GlobalStyles.buttonText}>Ver Imagenes</Text>

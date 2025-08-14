@@ -11,6 +11,8 @@ import {
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   limit,
@@ -122,98 +124,12 @@ export async function findAllItems() : Promise<any[]> {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-const items = [
-  {
-    name: "Caja Hyundai accent cvt",
-    code: "ABC123",
-    img: require("@/assets/images/detail/6.jpeg"),
-    properties: [
-      { name: "Marca", value: "Hyundai 1", order: 1 },
-      { name: "Modelo", value: "Caja Hyundai accent cvt", order: 2 },
-      {
-        name: "Compatibilidad",
-        value:
-          "Agregar aqui texto descriptivo para compatibilidad del producto",
-        order: 3,
-      },
-      { name: "Año", value: "Hyundai", order: 4 },
-      { name: "Cilindrada", value: "432432", order: 5 },
-      { name: "Color", value: "Rojo", order: 6 },
-      { name: "Combustible", value: "Gasolina", order: 7 },
-      { name: "Costo", value: "21321", order: 8 },
-      { name: "Seguro", value: "213210", order: 9 },
-      { name: "Flete", value: "213", order: 10 },
-      { name: "Valor CIF", value: "21321", order: 11 },
-    ],
-  },
-  {
-    name: "Modelo 2",
-    code: "DEF456",
-    properties: [
-      { name: "Marca", value: "Marca 2", order: 1 },
-      { name: "Modelo", value: "Modelo 2", order: 2 },
-      {
-        name: "Compatibilidad",
-        value:
-          "Agregar aqui texto descriptivo para compatibilidad del producto",
-        order: 3,
-      },
 
-      { name: "Año", value: "1995", order: 4 },
-      { name: "Cilindrada", value: "123456", order: 5 },
-      { name: "Color", value: "Azul", order: 6 },
-      { name: "Combustible", value: "Diésel", order: 7 },
-      { name: "Costo", value: "21321", order: 8 },
-      { name: "Seguro", value: "213210", order: 9 },
-      { name: "Flete", value: "213", order: 10 },
-      { name: "Valor CIF", value: "21321", order: 11 },
-    ],
-  },
-  {
-    name: "Modelo 3",
-    code: "GHI789",
-    properties: [
-      { name: "Marca", value: "Marca 3", order: 1 },
-      { name: "Modelo", value: "Modelo 3", order: 2 },
-      {
-        name: "Compatibilidad",
-        value:
-          "Agregar aqui texto descriptivo para compatibilidad del producto",
-        order: 3,
-      },
+export async function findItemById(id: string): Promise<Item | null> {
+  const docRef = doc(db, "items", id);
+  const snap = await getDoc(docRef);
 
-      { name: "Año", value: "2000", order: 4 },
-      { name: "Cilindrada", value: "654321", order: 5 },
-      { name: "Color", value: "Verde", order: 6 },
-      { name: "Combustible", value: "Híbrido", order: 7 },
-      { name: "Costo", value: "21321", order: 8 },
-      { name: "Seguro", value: "213210", order: 9 },
-      { name: "Flete", value: "213", order: 10 },
-      { name: "Valor CIF", value: "21321", order: 11 },
-    ],
-  },
-  {
-    name: "Modelo 4",
-    code: "JKL012",
-    properties: [
-      { name: "Marca", value: "Marca 4", order: 1 },
-      { name: "Modelo", value: "Modelo 4", order: 2 },
-      {
-        name: "Compatibilidad",
-        value:
-          "Agregar aqui texto descriptivo para compatibilidad del producto",
-        order: 3,
-      },
-      { name: "Año", value: "2005", order: 4 },
-      { name: "Cilindrada", value: "789012", order: 5 },
-      { name: "Color", value: "Amarillo", order: 6 },
-      { name: "Combustible", value: "Eléctrico", order: 7 },
-      { name: "Costo", value: "21321", order: 8 },
-      { name: "Seguro", value: "213210", order: 9 },
-      { name: "Flete", value: "213", order: 10 },
-      { name: "Valor CIF", value: "21321", order: 11 },
-    ],
-  },
-];
+  if (!snap.exists()) return null;
 
-export const getItems = () => items;
+  return { id: snap.id, ...snap.data() } as Item;
+}
