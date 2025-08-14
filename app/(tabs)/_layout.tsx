@@ -1,22 +1,11 @@
-import { router, Stack, usePathname } from "expo-router";
-import React, { useState } from "react";
+import { router, Stack, useGlobalSearchParams, usePathname } from "expo-router";
+import React, { useEffect, useState } from "react";
 
 import Login from "@/components/Login";
 import { Fab, FabIcon, FabLabel } from "@/components/ui/fab";
 import { ArrowLeftIcon } from "@/components/ui/icon";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { User } from "@/model/schema";
 
-const users = {
-  admin: {
-    name: "Admin",
-    pass: "123",
-  },
-  operador: {
-    name: "Operador",
-    pass: "123",
-  },
-};
 
 const LOGIN_STATUS = {
   loggedIn: 1,
@@ -24,10 +13,18 @@ const LOGIN_STATUS = {
 };
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const pathname = usePathname();
 
+  const { logout} = useGlobalSearchParams();
+
   const [loginStatus, setLoginStatus] = useState(LOGIN_STATUS.loggedOut);
+  console.log("logout", logout, pathname);
+    useEffect(() => {
+    if (logout) {
+      console.log("Logout detectado en layout");
+      setLoginStatus(LOGIN_STATUS.loggedOut);
+    }
+  }, [logout])
 
   if (loginStatus === LOGIN_STATUS.loggedOut) {
     return (

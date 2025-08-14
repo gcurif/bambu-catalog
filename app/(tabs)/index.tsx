@@ -1,33 +1,58 @@
+import Loading from "@/components/common/Loading";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { AddIcon, EditIcon, SearchIcon } from "@/components/ui/icon";
 import { GlobalPresets } from "@/constants/GlobalStyles";
 import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 
-const MainMenu = () => (
-  <View style={styles.container}>
-    <OptionButton
-      title="Busqueda"
-      icon={SearchIcon}
-      onPress={() => router.push("/search")}
-    />
-    <OptionButton
-      title="Agregar Nuevo"
-      icon={AddIcon}
-      onPress={() => router.push("/add")}
-    />
-    <OptionButton
-      title="Editar Opciones"
-      icon={EditIcon}
-      onPress={() => router.push("/edit")}
-    />
-    <OptionButton
-      title="Cambiar Usuario"
-      icon={EditIcon}
-      onPress={() => router.push("/edit")}
-    />
-    {/*
+const MainMenu = () => {
+  const [loading, setLoading] = React.useState(false);
+  const exit = () => {
+    setLoading(true);
+    // Simulate an exit operation
+    SecureStore.deleteItemAsync("user")
+      .then(() => {
+        setLoading(false);
+        router.replace("/?logout=true");
+      })
+      .catch((error) => {
+        setLoading(false);
+        Alert.alert(
+          "Error",
+          "No se pudo salir correctamente. Inténtalo de nuevo más tarde.",
+          [{ text: "OK" }]
+        );
+      });
+  };
+  return (
+    <View style={styles.container}>
+      <OptionButton
+        title="Busqueda"
+        icon={SearchIcon}
+        onPress={() => router.push("/search")}
+      />
+      <OptionButton
+        title="Agregar Nuevo"
+        icon={AddIcon}
+        onPress={() => router.push("/add")}
+      />
+      <OptionButton
+        title="Editar Opciones"
+        icon={EditIcon}
+        onPress={() => router.push("/edit")}
+      />
+      <OptionButton
+        title="Cambiar Usuario"
+        icon={EditIcon}
+        onPress={exit}
+      />
+      <Loading
+        show={loading}
+        label="Saliendo..."
+      />
+      {/*
           {
     <OptionButton
       title="Busqueda Rapida"
@@ -36,8 +61,9 @@ const MainMenu = () => (
     />  
       
       */}
-  </View>
-);
+    </View>
+  );
+};
 
 interface OptionButtonProps {
   title: string;

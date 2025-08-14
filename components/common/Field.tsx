@@ -6,12 +6,13 @@ type FieldProps = {
   placeholder: string | undefined;
   value: any;
   onChange: (value: any) => void;
-  type: string;
+  type: 'text' | 'number' | 'password';
   styles?: StyleSheet.NamedStyles<any>;
   className?: string;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
 };
 
-const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type, styles, className }) => {
+const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type = 'text', styles, className, autoCapitalize }) => {
 
     const validateNumber = (value: string) => {
       const trimmed = value.trim();
@@ -30,15 +31,18 @@ const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type, style
               size="3xl"
               style={[styles, stylesInternal.input]}
               className={className}
+              type={type}
             >
               <InputField
                 placeholder={placeholder}
                 value={value}
+                type={type === 'password' ? 'password' : 'text'}
                 onChangeText={(value) =>
                   type === "number"
                     ? handleNumberChange(value)
                     : onChange?.(value)
                 }
+                autoCapitalize={autoCapitalize}
               />
             </Input>
     );
