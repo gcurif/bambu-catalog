@@ -13,6 +13,8 @@ import FieldTextArea from "./common/FieldTextArea";
 import ModalAddEdit from "./common/ModalAddEdit";
 import { SimpleToast, SimpleToastRef } from "./common/SimpleToast";
 
+import * as ImagePicker from "expo-image-picker";
+
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
   onSearch?: (searchTerm: string, filters: Record<string, string>) => void;
@@ -38,11 +40,30 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
     succesToastRef.current?.show(message, headerMsg);
   };
 
+  const [imgs, setImgs] = useState<string[]>([]);
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      // Better typing than string array:
+      allowsEditing: false,
+      mediaTypes: ['images', 'videos'],
+      allowsMultipleSelection: true,
+      quality: 1,
+    });
+
+    // handle result if needed
+    if (!result.canceled) {
+      console.log("Selected images:", result);
+      const selectedImages = result.assets.map((asset) => asset.uri);
+      setImgs(selectedImages);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Heading style={styles.heading} size="xl">
         Agregar nuevo
       </Heading>
+
       <Field
         placeholder="Codigo"
         value={filters.code || ""}
@@ -50,6 +71,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
         type="text"
         className="mb-2"
       />
+
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
           {(() => {
@@ -82,7 +104,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
                       options={(item.options ?? []).map((opt) => ({
                         label: opt.name,
                         value: opt.name,
-                        fav: opt.fav || false, // Assuming fav is optional
+                        fav: opt.fav || false,
                       }))}
                     />
                     <Button
@@ -107,13 +129,20 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
                     type={item.type}
                   />
                 );
-
               default:
                 return null;
             }
           })()}
         </View>
       ))}
+
+      <Button style={{ height: 50}}  onPress={pickImage}>
+        <Text size="xl" style={{ color: "#fff" }}>{imgs.length > 0 ? 'Cambiar Fotos' : "Agregar Fotos"} </Text>
+      </Button>
+      {imgs.length > 0 && (
+        <Text size="xl" >Se agregaran {imgs.length} fotos</Text>
+      )}
+
       <View style={styles.buttonsContainer}>
         <Button
           size="xl"
@@ -127,6 +156,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
           <Text style={styles.labelBtn}>Agregar</Text>
         </Button>
       </View>
+
       <ModalAddEdit
         show={showModalAdd}
         onCloseClick={() => setShowModalAdd(false)}
@@ -138,15 +168,14 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
         value={newOption}
         onChangeValue={setNewOption}
       />
+
       <SimpleToast ref={succesToastRef} />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
+  container: { padding: 16 },
   filterContainer: {
     marginBottom: 8,
     display: "flex",
