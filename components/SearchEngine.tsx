@@ -12,7 +12,7 @@ import FieldSelect from "./common/FieldSelect";
 import FieldTextArea from "./common/FieldTextArea";
 
 export interface SearchEngineProps {
-  schema: FilterSchemaItem[];
+  schema: FilterSchemaItem[] | undefined;
   onSearch?: (filters: Record<string, string>) => void;
   onClear?: () => void;
 }
@@ -23,7 +23,6 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
   onClear,
 }) => {
   const [filters, setFilters] = useState<Record<string, string>>({});
-  console.log('scg',schema);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));

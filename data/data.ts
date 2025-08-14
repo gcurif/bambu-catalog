@@ -1,3 +1,4 @@
+import { Item } from './../model/schema';
 // lib/firebase.ts
 import { FilterSchemaItem, User } from "@/model/schema";
 import { getApp, getApps, initializeApp } from "firebase/app";
@@ -8,6 +9,7 @@ import {
   signInAnonymously,
 } from "firebase/auth";
 import {
+  addDoc,
   collection,
   getDocs,
   getFirestore,
@@ -106,10 +108,19 @@ export const getUserByUsrNameAndPass = withAuth(
     return users[0];
   }
 );
-// Inicializar Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-// const auth = getAuth(app);
+
+export const addItem = withAuth(
+  async (item: Item) => {
+    console.log("Adding item:", item);
+    const docRef = await addDoc(collection(db, "items"), item);
+    return docRef.id;
+  }
+);
+
+export async function findAllItems() : Promise<any[]> {
+  const snap = await getDocs(collection(db, "items"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
 
 const items = [
   {

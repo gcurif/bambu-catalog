@@ -22,3 +22,10 @@ export interface User {
   password: string;
   type: UserType;
 }
+
+export interface Item {
+  name: string;
+  code: string;
+  imgs: any[];
+  properties: any;
+}

@@ -9,10 +9,13 @@ const ItemDetail: React.FC<{
   item: {
     name: string;
     code: string;
-    img: any;
-    properties: { name: string; value: string; order: number }[];
+    [key: string]: any;
   };
 }> = ({ item }) => {
+
+
+  console.log('item',item);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{item.name}</Text>
@@ -33,10 +36,10 @@ const ItemDetail: React.FC<{
           )}
         </View>
         <View style={styles.detailsContainer}>
-          {item.properties.map((property, index) => (
+          {Object.entries(item).map(([key, value], index) => (
             <>
               <Text key={index} style={styles.detailText}>
-                {property.name}: {property.value}
+                {key}: {value}
               </Text>
               <Divider className="my-1" />
             </>

@@ -17,11 +17,12 @@ import { SimpleToast, SimpleToastRef } from "./common/SimpleToast";
 import * as ImagePicker from "expo-image-picker";
 import { ImagePickerAsset } from "expo-image-picker";
 
+import { addItem } from "@/data/data";
 import Loading from "./common/Loading";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
-  onSearch?: (searchTerm: string, filters: Record<string, string>) => void;
+  onSearch?: (searchTerm: string, filters: Record<string, string | number>) => void;
   onClear?: () => void;
 }
 
@@ -92,9 +93,14 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
     return result;
   };
 
-  const save = async (item : any) => {
-    console.log("saving item", item);
-  }
+  const createItem = (data: Record<string, string | number>, imgs:  any) => {
+    return {
+      name: data['Descripción'] as string || '',
+      code: data['Codigo'] as string || '',
+      imgs: imgs || [],
+      properties: data,
+    };
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -200,7 +206,8 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
                 const rsp = await uploadAllImgs2(imgs);
                 setLoading(false);
                 console.log("Todas las imagenes se han subido", rsp);
-                save({...filters, imgs: rsp});
+                setLoadingMsg("Guardando producto...");
+                await addItem(createItem(filters, rsp));
                 setImgs([]);
                 setFilters({});
                 showSuccessToast("Producto agregado correctamente!", "OK");

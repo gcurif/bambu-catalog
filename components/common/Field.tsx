@@ -21,7 +21,7 @@ const Field: React.FC<FieldProps> = ({ placeholder, value, onChange, type = 'tex
 
     const handleNumberChange = (value: string) => {
       if (validateNumber(value)) {
-        onChange?.(value);
+        onChange?.(value === "" ? "" : Number(value));
       }
     };
 
