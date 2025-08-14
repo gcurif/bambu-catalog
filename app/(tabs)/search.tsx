@@ -24,7 +24,7 @@ export default function TabTwoScreen() {
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any[]>([]);
 
-  const handleSearch = async (filters: Record<string, string>) => {
+  const handleSearch = async (filters: Record<string, string | number >) => {
     setLoading(true);
     console.log("Filters:", filters);
     // Simulate a search operation
@@ -37,19 +37,21 @@ export default function TabTwoScreen() {
       // Filter items based on the filters
       const filteredItems = items.filter((item) => {
         for (const k of keys) {
-          const value = filters?.[k];
+          const filterValue = filters?.[k];
+          const itemValue = item.properties[k];
 
-          if (!value) continue; // Skip if no filter value
-          if (typeof value === "string") {
-            if (!value.trim()) continue;
+          if (!filterValue) continue; // Skip if no filter value
+          if (typeof filterValue === "string") {
             if (
-              value &&
-              value.toLowerCase().includes(filters[k].toString().toLowerCase())
+              itemValue &&
+              itemValue.toLowerCase().includes(filterValue.toString().toLowerCase())
             ) {
+              console.log("Match str found for key:", k, "value:", itemValue, "filter:", filterValue);
               return true;
             }
           }
-          if (typeof value === "number" && value === filters[k]) {
+          if (typeof itemValue === "number" && itemValue === filterValue) {
+            console.log("Match num found for key:", k, "value:", itemValue, "filter:", filterValue);
             return true;
           }
         }
