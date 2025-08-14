@@ -6,6 +6,7 @@ import { Heading } from "@/components/ui/heading";
 import { AddIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 
+import { uploadImg } from "@/data/dropbox";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Field from "./common/Field";
 import FieldSelect from "./common/FieldSelect";
@@ -149,6 +150,11 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
           className="rounded-full p-3.5"
           style={styles.roundBtn}
           onPress={() => {
+
+            uploadImg(imgs[0]).then((url) => {
+              console.log("Uploaded image URL:", url);
+            });
+
             showSuccessToast("Producto agregado correctamente!", "OK");
           }}
         >
