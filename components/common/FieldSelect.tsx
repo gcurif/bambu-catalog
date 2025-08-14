@@ -7,6 +7,7 @@ import {
 import { Pressable } from "@/components/ui/pressable";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Icon, StarIcon } from "../ui/icon";
 import { Input, InputField } from "../ui/input";
 
 const FieldSelect = ({
@@ -34,23 +35,34 @@ const FieldSelect = ({
       </Pressable>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalBackdrop />
-        <ModalContent style={{ width: '70%'}}>
+        <ModalContent style={{ width: "75%" }}>
           <ModalBody
             className="bg-white"
             contentContainerClassName="items-center justify-center p-1 gap-3"
           >
-            {options?.map((option) => (
-              <View key={option.value}>
-                <Pressable
-                  onPress={() => {
-                    handleChange?.(option.value);
-                    setIsOpen(false);
+            {options
+              ?.sort((opt) => (opt.fav ? -1 : 1))
+              .map((option) => (
+                <View
+                  key={option.value}
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    padding: 8,
                   }}
                 >
-                  <Text style={{ fontSize: 18 }}>{option.label}</Text>
-                </Pressable>
-              </View>
-            ))}
+                  <Pressable
+                    onPress={() => {
+                      handleChange?.(option.value);
+                      setIsOpen(false);
+                    }}
+                  >
+                    <Text style={{ fontSize: 18 }}>{option.label}</Text>
+                  </Pressable>
+                  {option.fav && <Icon as={StarIcon} size="xl" />}
+                </View>
+              ))}
           </ModalBody>
         </ModalContent>
       </Modal>
