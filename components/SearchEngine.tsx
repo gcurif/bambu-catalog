@@ -74,8 +74,9 @@ export const SearchEngine: React.FC<SearchEngineProps> = ({
                         handleFilterChange(item.name, value)
                       }
                       options={(item.options ?? []).map((opt) => ({
-                        label: opt,
-                        value: opt,
+                        label: opt.name,
+                        value: opt.name,
+                        fav: opt.fav || false, // Assuming fav is optional
                       }))}
                     />
                   );

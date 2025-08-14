@@ -1,11 +1,18 @@
 
 export type FilterType = 'text' | 'number' | 'option' | 'textlg';
 
+export interface FilterSchemaOption {
+  name: string;
+  fav: boolean | null;
+}
+
 export interface FilterSchemaItem {
+  id: string;
   name: string;
   type: FilterType;
-  options?: string[];
+  options?: FilterSchemaOption[];
   filterable: boolean;
+  order: number;
 }
 
 export type UserType = 'admin' | 'operator';

@@ -41,8 +41,9 @@ export const EditItem: React.FC<SearchEngineProps> = ({
                 value={filters[item.name] || ""}
                 handleChange={(value) => handleFilterChange(item.name, value)}
                 options={(item.options ?? []).map((opt) => ({
-                  label: opt,
-                  value: opt,
+                  label: opt.name,
+                  value: opt.name,
+                  fav: opt.fav || false, // Assuming fav is optional
                 }))}
               />
               <View style={styles.buttonGroup}>

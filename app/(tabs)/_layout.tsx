@@ -14,6 +14,7 @@ const LOGIN_STATUS = {
 
 export default function TabLayout() {
   const pathname = usePathname();
+  const debug = true;
 
   const { logout} = useGlobalSearchParams();
 
@@ -26,7 +27,7 @@ export default function TabLayout() {
     }
   }, [logout])
 
-  if (loginStatus === LOGIN_STATUS.loggedOut) {
+  if (loginStatus === LOGIN_STATUS.loggedOut && !debug) {
     return (
       <>
         <Login onLogin={(user : User) => setLoginStatus(user ? LOGIN_STATUS.loggedIn : LOGIN_STATUS.loggedOut)} />

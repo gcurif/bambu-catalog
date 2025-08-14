@@ -3,6 +3,7 @@ import { GlobalStyles } from "@/constants/GlobalStyles";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import { Divider } from "./ui/divider";
 
 const ItemDetail: React.FC<{
   item: {
@@ -23,10 +24,7 @@ const ItemDetail: React.FC<{
             source={{ uri: item.img }}
             style={{ width: 250, height: 250 }}
           />*/
-            <Image
-              source={item.img}
-              style={{ width: 200, height: 200 }}
-            />
+            <Image source={item.img} style={{ width: 200, height: 200 }} />
           ) : (
             <Image
               source={require("@/assets/images/default.jpg")}
@@ -36,13 +34,23 @@ const ItemDetail: React.FC<{
         </View>
         <View style={styles.detailsContainer}>
           {item.properties.map((property, index) => (
-            <Text key={index} style={styles.detailText}>
-              {property.name}: {property.value}
-            </Text>
+            <>
+              <Text key={index} style={styles.detailText}>
+                {property.name}: {property.value}
+              </Text>
+              <Divider className="my-1" />
+            </>
           ))}
         </View>
       </View>
-      <Button size="xl" className="p-3.5 mt-4" style={{width: 200}} onPress={() => {router.push('/(tabs)/detail/321321')}}>
+      <Button
+        size="xl"
+        className="p-3.5 mt-4"
+        style={{ width: 200 }}
+        onPress={() => {
+          router.push("/(tabs)/detail/321321");
+        }}
+      >
         <Text style={GlobalStyles.buttonText}>Ver Imagenes</Text>
       </Button>
     </View>

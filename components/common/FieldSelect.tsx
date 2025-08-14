@@ -1,6 +1,12 @@
-import { Menu, MenuItem, MenuItemLabel } from "@/components/ui/menu";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalContent,
+} from "@/components/ui/modal";
 import { Pressable } from "@/components/ui/pressable";
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Input, InputField } from "../ui/input";
 
 const FieldSelect = ({
@@ -9,43 +15,45 @@ const FieldSelect = ({
   handleChange,
   options,
 }: FieldSelectProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <View style={{ flex: 1, width: "100%" }}>
-      <Menu
-        placement="top"
-        offset={5}
-        disabledKeys={["Settings"]}
-        trigger={({ ...triggerProps }) => {
-          return (
-            <Pressable {...triggerProps}>
-              <Input
-                variant="outline"
-                size="3xl"
-                style={styles.input}
-                {...triggerProps}
-              >
-                <InputField
-                  placeholder={placeholder}
-                  value={value}
-                  editable={false}
-                />
-              </Input>
-            </Pressable>
-          );
-        }}
-      >
-        {options?.map((option) => (
-          <MenuItem
-            key={option.value}
-            textValue={option.value}
-            onPress={() => {
-              handleChange?.(option.value);
-            }}
+      <Pressable onPress={() => setIsOpen(true)}>
+        <Input
+          variant="outline"
+          size="3xl"
+          style={styles.input}
+          onTouchEnd={() => setIsOpen(true)}
+        >
+          <InputField
+            placeholder={placeholder}
+            value={value}
+            editable={false}
+          />
+        </Input>
+      </Pressable>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalBackdrop />
+        <ModalContent style={{ width: '70%'}}>
+          <ModalBody
+            className="bg-white"
+            contentContainerClassName="items-center justify-center p-1 gap-3"
           >
-            <MenuItemLabel size="3xl">{option.label}</MenuItemLabel>
-          </MenuItem>
-        ))}
-      </Menu>
+            {options?.map((option) => (
+              <View key={option.value}>
+                <Pressable
+                  onPress={() => {
+                    handleChange?.(option.value);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Text style={{ fontSize: 18 }}>{option.label}</Text>
+                </Pressable>
+              </View>
+            ))}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </View>
   );
 };
@@ -53,6 +61,7 @@ const FieldSelect = ({
 type FieldSelectOption = {
   label: string;
   value: string;
+  fav: boolean;
 };
 
 type FieldSelectProps = {

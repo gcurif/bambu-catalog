@@ -9,6 +9,7 @@ import { Text } from "@/components/ui/text";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Field from "./common/Field";
 import FieldSelect from "./common/FieldSelect";
+import FieldTextArea from "./common/FieldTextArea";
 import ModalAddEdit from "./common/ModalAddEdit";
 import { SimpleToast, SimpleToastRef } from "./common/SimpleToast";
 
@@ -42,39 +43,75 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
       <Heading style={styles.heading} size="xl">
         Agregar nuevo
       </Heading>
+      <Field
+        placeholder="Codigo"
+        value={filters.code || ""}
+        onChange={(value) => handleFilterChange("code", value)}
+        type="text"
+        className="mb-2"
+      />
       {schema.map((item, index) => (
         <View key={index} style={styles.filterContainer}>
-          {item.type === "text" || item.type === "number" ? (
-            <Field
-              placeholder={item.name}
-              value={filters[item.name] || ""}
-              onChange={(value) => handleFilterChange(item.name, value)}
-              type={item.type}
-            />
-          ) : item.type === "option" ? (
-            <View style={{ flexDirection: "row", alignItems: "center", width: "100%" }}>
-              <FieldSelect
-                placeholder={item.name}
-                value={filters[item.name] || ""}
-                handleChange={(value) => handleFilterChange(item.name, value)}
-                options={(item.options ?? []).map((opt) => ({
-                  label: opt,
-                  value: opt,
-                }))}
-              />
-              <Button
-                size="sm"
-                style={{
-                  marginLeft: 8,
-                  backgroundColor: "rgba(255, 255, 255, 1)",
-                }}
-                onPress={() => setShowModalAdd(true)}
-                variant="outline"
-              >
-                <Text>+</Text>
-              </Button>
-            </View>
-          ) : null}
+          {(() => {
+            switch (item.type) {
+              case "text":
+              case "number":
+                return (
+                  <Field
+                    placeholder={item.name}
+                    value={filters[item.name] || ""}
+                    onChange={(value) => handleFilterChange(item.name, value)}
+                    type={item.type}
+                  />
+                );
+              case "option":
+                return (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <FieldSelect
+                      placeholder={item.name}
+                      value={filters[item.name] || ""}
+                      handleChange={(value) =>
+                        handleFilterChange(item.name, value)
+                      }
+                      options={(item.options ?? []).map((opt) => ({
+                        label: opt.name,
+                        value: opt.name,
+                        fav: opt.fav || false, // Assuming fav is optional
+                      }))}
+                    />
+                    <Button
+                      size="sm"
+                      style={{
+                        marginLeft: 8,
+                        backgroundColor: "rgba(255, 255, 255, 1)",
+                      }}
+                      onPress={() => setShowModalAdd(true)}
+                      variant="outline"
+                    >
+                      <Text>+</Text>
+                    </Button>
+                  </View>
+                );
+              case "textlg":
+                return (
+                  <FieldTextArea
+                    placeholder={item.name}
+                    value={filters[item.name] || ""}
+                    onChange={(value) => handleFilterChange(item.name, value)}
+                    type={item.type}
+                  />
+                );
+
+              default:
+                return null;
+            }
+          })()}
         </View>
       ))}
       <View style={styles.buttonsContainer}>
@@ -123,14 +160,14 @@ const styles = StyleSheet.create({
   },
   labelBtn: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 22,
   },
   heading: {
     marginBottom: 16,
   },
   roundBtn: {
-    width: 140,
-    height: 140,
+    width: 145,
+    height: 145,
     justifyContent: "center",
     alignItems: "center",
     color: "#fff",

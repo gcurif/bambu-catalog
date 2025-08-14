@@ -1,11 +1,11 @@
 // lib/firebase.ts
-import { User } from "@/model/schema";
+import { FilterSchemaItem, User } from "@/model/schema";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import {
   getAuth,
   initializeAuth,
   onAuthStateChanged,
-  signInAnonymously
+  signInAnonymously,
 } from "firebase/auth";
 import {
   collection,
@@ -13,7 +13,7 @@ import {
   getFirestore,
   limit,
   query,
-  where
+  where,
 } from "firebase/firestore";
 import { verifyPassword } from "./crypt";
 
@@ -31,7 +31,14 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 // En RN usa initializeAuth con persistencia
 const auth =
-  getApps().length && (() => { try { return getAuth(app); } catch { return null; } })()
+  getApps().length &&
+  (() => {
+    try {
+      return getAuth(app);
+    } catch {
+      return null;
+    }
+  })()
     ? getAuth(app)
     : initializeAuth(app);
 
@@ -68,45 +75,43 @@ async function ensureAuthOnce(): Promise<void> {
   return authReadyPromise;
 }
 
-function withAuth<Args extends any[], R>(
-  fn: (...args: Args) => Promise<R>
-) {
+function withAuth<Args extends any[], R>(fn: (...args: Args) => Promise<R>) {
   return async (...args: Args): Promise<R> => {
     await ensureAuthOnce();
     return fn(...args);
   };
 }
 
-export const getSchema = withAuth(async () => {
+export const getSchema = withAuth(async (): Promise<FilterSchemaItem[]> => {
   const snap = await getDocs(collection(db, "schemas"));
-  console.log("Schema fetched:", snap.docs.map((d) => (d.data())));
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  return snap.docs
+    .map((d) => ({ id: d.id, ...d.data() } as FilterSchemaItem))
+    .sort((a, b) => a.order - b.order);
 });
 
 export const getUser = withAuth(async (user): Promise<User[]> => {
-
   const usersCollection = collection(db, "users");
   const q = query(usersCollection, where("username", "==", user), limit(1));
 
   const snap = await getDocs(q);
-
-  console.log("Users fetched:", snap.docs.map((d) => (d.data())));
-  return snap.docs.map((d) => (d.data() as User));
+  return snap.docs.map((d) => d.data() as User);
 });
 
-export const getUserByUsrNameAndPass = withAuth(async (username: string, password: string) => {
-  const users : User[] = await getUser(username);
-  if (!users || users.length === 0) return null;
-  const valid = await verifyPassword(password, users[0].password);
-  if (!valid) return null;
-  return users[0];
-});
-  // Inicializar Firebase
-  // const app = initializeApp(firebaseConfig);
-  // const db = getFirestore(app);
-  // const auth = getAuth(app);
+export const getUserByUsrNameAndPass = withAuth(
+  async (username: string, password: string) => {
+    const users: User[] = await getUser(username);
+    if (!users || users.length === 0) return null;
+    const valid = await verifyPassword(password, users[0].password);
+    if (!valid) return null;
+    return users[0];
+  }
+);
+// Inicializar Firebase
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+// const auth = getAuth(app);
 
-const items  = [
+const items = [
   {
     name: "Caja Hyundai accent cvt",
     code: "ABC123",
@@ -201,4 +206,3 @@ const items  = [
 ];
 
 export const getItems = () => items;
-
