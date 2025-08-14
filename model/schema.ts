@@ -13,6 +13,7 @@ export interface FilterSchemaItem {
   options?: FilterSchemaOption[];
   filterable: boolean;
   order: number;
+  orderToShow?: number;
 }
 
 export type UserType = 'admin' | 'operator';
@@ -27,5 +28,5 @@ export interface Item {
   name: string;
   code: string;
   imgs: any[];
-  properties: any;
+  properties: { [key: string]: string | number | undefined };
 }

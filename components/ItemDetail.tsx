@@ -1,20 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { GlobalStyles } from "@/constants/GlobalStyles";
+import { FilterSchemaItem, Item } from "@/model/schema";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { Divider } from "./ui/divider";
 
 const ItemDetail: React.FC<{
-  item: {
-    name: string;
-    code: string;
-    [key: string]: any;
-  };
-}> = ({ item }) => {
-
+  item: Item;
+  schema: FilterSchemaItem[] | undefined;
+}> = ({ item, schema = [] }) => {
 
   console.log('item',item);
+  const img = item.imgs && item.imgs.length > 0 ? item.imgs[0] : null;
+  const schemaToShow = schema?.sort((a, b) => a.orderToShow! - b.orderToShow!);
 
   return (
     <View style={styles.container}>
@@ -22,12 +21,12 @@ const ItemDetail: React.FC<{
       <Text style={styles.code}>Código: {item.code}</Text>
       <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
         <View style={styles.imageContainer}>
-          {item.img ? (
+          {img ? (
             /*<Image
             source={{ uri: item.img }}
             style={{ width: 250, height: 250 }}
           />*/
-            <Image source={item.img} style={{ width: 200, height: 200 }} />
+            <Image source={img.publicUrl} style={{ width: 200, height: 200 }} />
           ) : (
             <Image
               source={require("@/assets/images/default.jpg")}
@@ -36,10 +35,10 @@ const ItemDetail: React.FC<{
           )}
         </View>
         <View style={styles.detailsContainer}>
-          {Object.entries(item).map(([key, value], index) => (
+          {schemaToShow.map((s, index) => (
             <>
               <Text key={index} style={styles.detailText}>
-                {key}: {value}
+                {s.name}: {item.properties[s.name]}
               </Text>
               <Divider className="my-1" />
             </>

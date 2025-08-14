@@ -96,7 +96,7 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
   const createItem = (data: Record<string, string | number>, imgs:  any) => {
     return {
       name: data['Descripción'] as string || '',
-      code: data['Codigo'] as string || '',
+      code: data['Codigo'] as string || data.code || '',
       imgs: imgs || [],
       properties: data,
     };

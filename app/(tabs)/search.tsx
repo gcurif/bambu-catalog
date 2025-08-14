@@ -15,6 +15,7 @@ export default function TabTwoScreen() {
   useEffect(() => {
     const fetchSchema = async () => {
       const schemas = await getSchema();
+      console.log("Schemas:", schemas);
       setSchema(schemas);
     };
     fetchSchema();
@@ -36,7 +37,19 @@ export default function TabTwoScreen() {
       // Filter items based on the filters
       const filteredItems = items.filter((item) => {
         for (const k of keys) {
-          if(item && item[k] && item[k].toString().toLowerCase().includes(filters[k].toLowerCase())) {
+          const value = filters?.[k];
+
+          if (!value) continue; // Skip if no filter value
+          if (typeof value === "string") {
+            if (!value.trim()) continue;
+            if (
+              value &&
+              value.toLowerCase().includes(filters[k].toString().toLowerCase())
+            ) {
+              return true;
+            }
+          }
+          if (typeof value === "number" && value === filters[k]) {
             return true;
           }
         }
@@ -66,7 +79,7 @@ export default function TabTwoScreen() {
             <Spinner className="mt-4" size="large" color={colors.gray[500]} />
           </View>
         ) : items ? (
-          items.map((item, index) => <ItemDetail key={index} item={item} />)
+          items.map((item, index) => <ItemDetail key={index} schema={schema} item={item} />)
         ) : null}
       </View>
     </ScrollView>
