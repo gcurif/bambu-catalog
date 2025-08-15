@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     marginRight: 4,
-    backgroundColor: "rgba(255, 255, 255, 1)",
     width: "80%",
     minHeight: 48,
   },

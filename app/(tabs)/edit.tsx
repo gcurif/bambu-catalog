@@ -19,7 +19,6 @@ export default function HomeScreen() {
     <View style={GlobalStyles.container}>
       <EditItem
         schema={schema}
-        onSearch={(term, filters) => console.log(term, filters)}
       />
     </View>
   );

@@ -1,4 +1,4 @@
-import { Item } from './../model/schema';
+import { FilterSchemaOption, Item } from './../model/schema';
 // lib/firebase.ts
 import { FilterSchemaItem, User } from "@/model/schema";
 import { getApp, getApps, initializeApp } from "firebase/app";
@@ -17,6 +17,7 @@ import {
   getFirestore,
   limit,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { verifyPassword } from "./crypt";
@@ -102,8 +103,19 @@ export async function getSchemaItemById(id: string): Promise<FilterSchemaItem | 
   return { id: snap.id, ...snap.data() } as FilterSchemaItem;
 }
 
+export const setSchemaOptions = withAuth(
+  async (schemaId: string, newOptions: FilterSchemaOption[]) => {
+    const ref = doc(db, "schemas", schemaId);
 
+    // Opcional: validar que el doc exista
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      throw new Error(`Schema ${schemaId} not found`);
+    }
 
+    await updateDoc(ref, { options: newOptions });
+  }
+);
 
 export const getUser = withAuth(async (user): Promise<User[]> => {
   const usersCollection = collection(db, "users");
