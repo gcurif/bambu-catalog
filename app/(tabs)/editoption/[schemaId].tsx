@@ -1,6 +1,7 @@
 import Loading from "@/components/common/Loading";
 import ModalAddEdit from "@/components/common/ModalAddEdit";
 import ModalDelete from "@/components/common/ModalDelete";
+import { SimpleToast, SimpleToastRef } from "@/components/common/SimpleToast";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
@@ -10,7 +11,7 @@ import { GlobalPresets } from "@/constants/GlobalStyles";
 import { getSchemaItemById, setSchemaOptions } from "@/data/data";
 import { FilterSchemaItem, FilterSchemaOption } from "@/model/schema";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 export default function EditOptionScreen() {
@@ -35,6 +36,12 @@ export default function EditOptionScreen() {
       });
   }, []);
 
+  useEffect(() => {
+    if (schemaItem && schemaItem.options) {
+      setSchemaOptions(schemaItem.id, schemaItem.options);
+    }
+  }, [schemaItem]);
+
   const handleOptionChange = (
     updatedOpt: FilterSchemaOption,
     action: "edit" | "delete" | "fav",
@@ -46,7 +53,10 @@ export default function EditOptionScreen() {
           i === index ? updatedOpt : opt
         );
         setSchemaItem({ ...schemaItem, options: updatedOptions });
-        setSchemaOptions(schemaItem.id, updatedOptions);
+        toastRef.current?.show(
+          ` ${updatedOpt.name} ${updatedOpt.fav ? "a favoritos" : "Quitado de favoritos"}`, 
+          "Opción actualizada"
+        );
       }
     } else if (action === "delete") {
       setModalItem(updatedOpt);
@@ -58,6 +68,8 @@ export default function EditOptionScreen() {
       console.log("Editing option:", updatedOpt, index);
     }
   };
+
+  const toastRef = useRef<SimpleToastRef>(null);
 
   const sort = (a: FilterSchemaOption, b: FilterSchemaOption) => {
     if (a.fav && !b.fav) return -1;
@@ -148,6 +160,7 @@ export default function EditOptionScreen() {
           setShowModalDelete(false);
         }}
       />
+      <SimpleToast ref={toastRef} />
     </View>
   );
 }

@@ -98,6 +98,7 @@ export default function DetalleUnidad() {
           height={singleImgHeight}
           imgId="0"
           onClick={(img) => goToImgZoom(img, item as Item)}
+          key={`single-${i}`}
         />
       );
     }
@@ -112,6 +113,7 @@ export default function DetalleUnidad() {
           imgId1="0"
           imgId2="1"
           onClick={(img) => goToImgZoom(img, item as Item)}
+          key={`double-${i}`}
         />
       );
     }

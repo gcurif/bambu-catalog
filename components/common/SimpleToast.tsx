@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 import {
   Toast,
@@ -14,7 +14,7 @@ export type SimpleToastRef = {
 type Props = {};
 
 export const SimpleToast = forwardRef<SimpleToastRef, Props>((_, ref) => {
-  const [, setToastId] = React.useState<string>("");
+  const [, setToastId] = useState<string>("");
   const toast = useToast();
   // Exponer la función al padre
   useImperativeHandle(ref, () => ({
@@ -28,9 +28,9 @@ export const SimpleToast = forwardRef<SimpleToastRef, Props>((_, ref) => {
         render: ({ id }) => {
           const uniqueToastId = "toast-" + id;
           return (
-            <Toast nativeID={uniqueToastId} action="muted" variant="solid">
+            <Toast nativeID={uniqueToastId} action="muted" variant="solid" style={{ height: "40%", marginTop: '50%' }}>
               <ToastTitle>{headerMsg}</ToastTitle>
-              <ToastDescription>{msg}</ToastDescription>
+              <ToastDescription style={{ fontSize: 20 }}>{msg}</ToastDescription>
             </Toast>
           );
         },

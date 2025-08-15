@@ -7,6 +7,7 @@ import {
 import { Pressable } from "@/components/ui/pressable";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Divider } from "../ui/divider";
 import { Icon, StarIcon } from "../ui/icon";
 import { Input, InputField } from "../ui/input";
 
@@ -17,6 +18,11 @@ const FieldSelect = ({
   options,
 }: FieldSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const sort = (a: FieldSelectOption, b: FieldSelectOption) => {
+    if (a.fav && !b.fav) return -1;
+    if (!a.fav && b.fav) return 1;
+    return a.label.localeCompare(b.label);
+  };
   return (
     <View style={{ flex: 1, width: "100%" }}>
       <Pressable onPress={() => setIsOpen(true)}>
@@ -41,26 +47,28 @@ const FieldSelect = ({
             contentContainerClassName="items-center justify-center p-1 gap-3"
           >
             {options
-              ?.sort((opt) => (opt.fav ? -1 : 1))
+              ?.sort(sort)
               .map((option) => (
-                <View
-                  key={option.value}
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    padding: 8,
-                  }}
-                >
+                <View key={option.value} style={{ width: "100%" }}>
                   <Pressable
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      padding: 6,
+                      alignItems: "center",
+                    }}
                     onPress={() => {
                       handleChange?.(option.value);
                       setIsOpen(false);
                     }}
                   >
-                    <Text style={{ fontSize: 18 }}>{option.label}</Text>
+                    <Text style={{ fontSize: 19 }}>{option.label}</Text>
+                    {option.fav && (
+                      <Icon as={StarIcon} size="xl" color="#eeca00ff" />
+                    )}
                   </Pressable>
-                  {option.fav && <Icon as={StarIcon} size="xl" />}
+                  <Divider style={{ marginVertical: 4 }} />
                 </View>
               ))}
           </ModalBody>
