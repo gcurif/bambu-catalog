@@ -93,6 +93,18 @@ export const getSchema = withAuth(async (): Promise<FilterSchemaItem[]> => {
     .sort((a, b) => a.order - b.order);
 });
 
+export async function getSchemaItemById(id: string): Promise<FilterSchemaItem | null> {
+  const docRef = doc(db, "schemas", id);
+  const snap = await getDoc(docRef);
+
+  if (!snap.exists()) return null;
+
+  return { id: snap.id, ...snap.data() } as FilterSchemaItem;
+}
+
+
+
+
 export const getUser = withAuth(async (user): Promise<User[]> => {
   const usersCollection = collection(db, "users");
   const q = query(usersCollection, where("username", "==", user), limit(1));
