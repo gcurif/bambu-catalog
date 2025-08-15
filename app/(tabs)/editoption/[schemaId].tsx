@@ -20,6 +20,7 @@ export default function EditOptionScreen() {
   const [showModalAddEdit, setShowModalAddEdit] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [modalItem, setModalItem] = useState<FilterSchemaOption | null>(null);
+  const [newOptionValue, setNewOptionValue] = useState<string>("");
 
   useEffect(() => {
     getSchemaItemById(schemaId as string)
@@ -37,10 +38,20 @@ export default function EditOptionScreen() {
   }, []);
 
   useEffect(() => {
+    console.log("Schema item updated:", schemaItem);
     if (schemaItem && schemaItem.options) {
       setSchemaOptions(schemaItem.id, schemaItem.options);
+      setModalItem(null);
     }
   }, [schemaItem]);
+
+  useEffect(() => {
+    console.log("show modal :", showModalAddEdit);
+    if (!showModalAddEdit) {
+      setNewOptionValue("");
+      setModalItem(null);
+    }
+  }, [showModalAddEdit]);
 
   const handleOptionChange = (
     updatedOpt: FilterSchemaOption,
@@ -63,6 +74,7 @@ export default function EditOptionScreen() {
       setShowModalDelete(true);
       console.log("Deleting option:", updatedOpt, index);
     } else if (action === "edit") {
+      setNewOptionValue(updatedOpt.name);
       setModalItem(updatedOpt);
       setShowModalAddEdit(true);
       console.log("Editing option:", updatedOpt, index);
@@ -77,7 +89,6 @@ export default function EditOptionScreen() {
     return a.name.localeCompare(b.name);
   };
 
-  console.log("Schema item:", schemaItem);
   return (
     <View
       style={{
@@ -117,36 +128,39 @@ export default function EditOptionScreen() {
         </Text>
       </Button>
       <ModalAddEdit
-        value={modalItem?.name || ""}
+        value={newOptionValue}
         show={showModalAddEdit}
         onCloseClick={() => {
-          setModalItem(null);
           setShowModalAddEdit(false);
         }}
         onCancel={() => {
-          setModalItem(null);
           setShowModalAddEdit(false);
         }}
         onConfirm={(value) => {
+          console.log("ejecutando on confirm", value);
           if (schemaItem) {
-            const updatedOptions = [
-              ...(schemaItem.options || []),
-              { name: value, fav: false },
-            ];
-            setSchemaItem({ ...schemaItem, options: updatedOptions });
-            setSchemaOptions(schemaItem.id, updatedOptions);
+            console.log("entrando si existe el schemaItem:", schemaItem);
+            if(modalItem){
+              console.log("Editing existing option:", modalItem.name, "to", value);
+              const updatedOptions = schemaItem.options?.map((opt) =>
+                opt.name === modalItem.name ? { ...opt, name: newOptionValue } : opt
+              );
+              setSchemaItem({ ...schemaItem, options: updatedOptions });
+            } else{
+              console.log("Adding new option:", value);
+              const newOption = { name: newOptionValue, fav: false };
+              setSchemaItem({ ...schemaItem, options: [...(schemaItem.options || []), newOption] });
+            }
           }
           setShowModalAddEdit(false);
         }}
         onChangeValue={(value) => {
-          console.log("Modal value changed:", value);
-          setModalItem({ name: value, fav: modalItem?.fav ?? null });
+            setNewOptionValue(value);
         }}
       />
       <ModalDelete
         show={showModalDelete}
         onCloseClick={() => {
-          setModalItem(null);
           setShowModalDelete(false);
         }}
         onConfirm={() => {
@@ -155,7 +169,6 @@ export default function EditOptionScreen() {
               (opt) => opt.name !== modalItem.name
             );
             setSchemaItem({ ...schemaItem, options: updatedOptions });
-            setSchemaOptions(schemaItem.id, updatedOptions || []);
           }
           setShowModalDelete(false);
         }}

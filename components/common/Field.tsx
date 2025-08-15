@@ -52,6 +52,7 @@ const Field: React.FC<FieldProps & { inputRef?: any }> = ({
         onChangeText={(value) =>
           type === "number" ? handleNumberChange(value) : onChange?.(value)
         }
+        keyboardType={type === "number" ? "numeric" : "default"}
         autoCapitalize={autoCapitalize}
       />
     </Input>
