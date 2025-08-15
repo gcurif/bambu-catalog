@@ -24,10 +24,18 @@ export interface User {
   type: UserType;
 }
 
+export interface ItemImg {
+  id: string;
+  publicUrl: string;
+  width: number;
+  height: number;
+}
+
+
 export interface Item {
   id?: string; // Optional for new items
   name: string;
   code: string;
-  imgs: any[];
+  imgs: ItemImg[];
   properties: { [key: string]: string | number | undefined };
 }

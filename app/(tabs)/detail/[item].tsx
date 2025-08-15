@@ -2,13 +2,13 @@ import Loading from "@/components/common/Loading";
 import { Heading } from "@/components/ui/heading";
 import { GlobalStyles } from "@/constants/GlobalStyles";
 import { findItemById } from "@/data/data";
-import { Item } from "@/model/schema";
+import { Item, ItemImg } from "@/model/schema";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Dimensions, Image, Pressable, ScrollView, View } from "react-native";
 
 interface ImgSlot {
-  imgSrc: string | string[];
+  imgs: ItemImg[];
   orientation: "single" | "double";
 }
 
@@ -47,22 +47,18 @@ export default function DetalleUnidad() {
   const imgSlots: ImgSlot[] = [];
   let lastDoubleSlot: ImgSlot | null = null;
 
-  imgs2.forEach((img, index) => {
-    console.log("Processing image:", img, "at index:", index);
+  imgs2.forEach((img: ItemImg, index: number) => {
     const orientation = img.width > img.height ? "single" : "double";
-
     if (orientation === "double") {
       if (lastDoubleSlot) {
-        imgSlots.push({
-          imgSrc: [...lastDoubleSlot.imgSrc, img.publicUrl],
-          orientation: "double",
-        });
+        lastDoubleSlot.imgs.push(img);
+        imgSlots.push(lastDoubleSlot);
         lastDoubleSlot = null; // Reset after pairing
       } else {
-        lastDoubleSlot = { imgSrc: [img.publicUrl], orientation: "double" };
+        lastDoubleSlot = { imgs: [img], orientation: "double" };
       }
     } else {
-      imgSlots.push({ imgSrc: img.publicUrl, orientation });
+      imgSlots.push({ imgs: [img], orientation });
     }
   });
 
@@ -77,7 +73,7 @@ export default function DetalleUnidad() {
     if (single[i]) {
       slotsToshow.push(
         <SingleImgView
-          imgSrc={single[i].imgSrc}
+          imgSrc={single[i].imgs[0]}
           width={singleImgWidth}
           height={singleImgHeight}
           imgId="0"
@@ -87,8 +83,8 @@ export default function DetalleUnidad() {
     if (double[i]) {
       slotsToshow.push(
         <DoubleImgView
-          imgSrc1={double[i].imgSrc[0]}
-          imgSrc2={double[i].imgSrc[1]}
+          imgSrc1={double[i].imgs[0]}
+          imgSrc2={double[i].imgs[1]}
           width={doubleImgWidth}
           height={doubleImgHeight}
           imgSep={imgSep}
@@ -135,6 +131,17 @@ type DoubleImgViewProps = {
   imgId2?: string;
 };
 
+const goToImgZoom = (imgSrc: ItemImg) => {
+  router.push({
+    pathname: "/(tabs)/detail/img/[imgname]",
+    params: {
+      imgname: imgSrc.publicUrl,
+      width: imgSrc.width,
+      height: imgSrc.height,
+    },
+  });
+};
+
 const SingleImgView = ({
   imgSrc,
   width,
@@ -143,9 +150,9 @@ const SingleImgView = ({
 }: SingleImgViewProps) => {
   return (
     <View className="mt-4">
-      <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId}`)}>
+      <Pressable onPress={() => goToImgZoom(imgSrc)}>
         <Image
-          source={imgSrc}
+          source={imgSrc.publicUrl}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
@@ -164,23 +171,25 @@ const DoubleImgView = ({
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
-      <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId1}`)}>
+      <Pressable onPress={() => goToImgZoom(imgSrc1)}>
         <Image
-          source={imgSrc1}
+          source={imgSrc1.publicUrl}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
-      <Pressable onPress={() => router.push(`/(tabs)/detail/img/${imgId2}`)}>
-        <Image
-          source={imgSrc2}
-          style={{
-            width: width,
-            height: height,
-            marginLeft: imgSep || 8,
-            resizeMode: "stretch",
-          }}
-        />
-      </Pressable>
+      {imgSrc2 && (
+        <Pressable onPress={() => goToImgZoom(imgSrc2)}>
+          <Image
+            source={imgSrc2.publicUrl}
+            style={{
+              width: width,
+              height: height,
+              marginLeft: imgSep || 8,
+              resizeMode: "stretch",
+            }}
+          />
+        </Pressable>
+      )}
     </View>
   );
 };
