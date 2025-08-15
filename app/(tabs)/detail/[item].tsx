@@ -7,26 +7,17 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Dimensions, Image, Pressable, ScrollView, View } from "react-native";
 
+interface ImgSlot {
+  imgSrc: string | string[];
+  orientation: "single" | "double";
+}
+
 export default function DetalleUnidad() {
   const { item: itemId } = useLocalSearchParams();
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState<Item | null>(null);
 
   const { height: wHeight, width: wWidth } = Dimensions.get("window");
-  useEffect(() => {
-
-    findItemById(itemId as string).then((item) => {
-      console.log("Item:", item)
-      if (!item) {
-        console.error("Item not found:", itemId)
-        return;
-      }
-      console.log("Item found:", item);
-      setLoading(false);
-    });
-  }, []);
-
-  const imgLgHeight = wHeight / 3;
 
   const marginLeft = 16;
   const marginRight = 16;
@@ -37,16 +28,77 @@ export default function DetalleUnidad() {
   const doubleImgWidth = (wWidth - marginLeft - marginRight - imgSep) / 2;
   const doubleImgHeight = wHeight / 2.5;
 
-  const imgs = [
-    require("@/assets/images/detail/1.jpeg"),
-    require("@/assets/images/detail/2.jpeg"),
-    require("@/assets/images/detail/3.jpeg"),
-    require("@/assets/images/detail/4.jpeg"),
-    require("@/assets/images/detail/5.jpeg"),
-    require("@/assets/images/detail/6.jpeg"),
-    require("@/assets/images/detail/7.jpeg"),
-    require("@/assets/images/detail/8.jpeg"),
-  ];
+  useEffect(() => {
+    findItemById(itemId as string).then((item) => {
+      console.log("Item:", item);
+      if (!item) {
+        console.error("Item not found:", itemId);
+        return;
+      }
+      console.log("Item found:", item);
+      setItem(item);
+      setLoading(false);
+    });
+  }, []);
+
+  const imgs2 = item?.imgs || [];
+  console.log("Item images:", imgs2);
+
+  const imgSlots: ImgSlot[] = [];
+  let lastDoubleSlot: ImgSlot | null = null;
+
+  imgs2.forEach((img, index) => {
+    console.log("Processing image:", img, "at index:", index);
+    const orientation = img.width > img.height ? "single" : "double";
+
+    if (orientation === "double") {
+      if (lastDoubleSlot) {
+        imgSlots.push({
+          imgSrc: [...lastDoubleSlot.imgSrc, img.publicUrl],
+          orientation: "double",
+        });
+        lastDoubleSlot = null; // Reset after pairing
+      } else {
+        lastDoubleSlot = { imgSrc: [img.publicUrl], orientation: "double" };
+      }
+    } else {
+      imgSlots.push({ imgSrc: img.publicUrl, orientation });
+    }
+  });
+
+  const { single = [], double = [] } = Object.groupBy(
+    imgSlots,
+    (slot) => slot.orientation
+  );
+  const max = Math.max(single.length, double.length);
+  const slotsToshow = [];
+
+  for (let i = 0; i < max; i++) {
+    if (single[i]) {
+      slotsToshow.push(
+        <SingleImgView
+          imgSrc={single[i].imgSrc}
+          width={singleImgWidth}
+          height={singleImgHeight}
+          imgId="0"
+        />
+      );
+    }
+    if (double[i]) {
+      slotsToshow.push(
+        <DoubleImgView
+          imgSrc1={double[i].imgSrc[0]}
+          imgSrc2={double[i].imgSrc[1]}
+          width={doubleImgWidth}
+          height={doubleImgHeight}
+          imgSep={imgSep}
+          imgId1="0"
+          imgId2="1"
+        />
+      );
+    }
+  }
+
   return (
     <ScrollView style={GlobalStyles.containerScrollable}>
       {loading ? (
@@ -59,48 +111,7 @@ export default function DetalleUnidad() {
           <Heading size="3xl" className="mt-10 mb-4">
             Galeria
           </Heading>
-          <SingleImgView
-            imgSrc={imgs[0]}
-            width={singleImgWidth}
-            height={singleImgHeight}
-            imgId="0"
-          />
-          <DoubleImgView
-            imgSrc1={imgs[3]}
-            imgSrc2={imgs[4]}
-            imgId1="3"
-            imgId2="4"
-            width={doubleImgWidth}
-            height={doubleImgHeight}
-            imgSep={imgSep}
-          />
-          <SingleImgView
-            imgSrc={imgs[1]}
-            width={singleImgWidth}
-            height={singleImgHeight}
-            imgId="1"
-          />
-          <SingleImgView
-            imgSrc={imgs[2]}
-            imgId="2"
-            width={singleImgWidth}
-            height={singleImgHeight}
-          />
-          <DoubleImgView
-            imgSrc1={imgs[5]}
-            imgSrc2={imgs[6]}
-            imgId1="5"
-            imgId2="6"
-            width={doubleImgWidth}
-            height={doubleImgHeight}
-            imgSep={imgSep}
-          />
-          <SingleImgView
-            imgSrc={imgs[7]}
-            width={singleImgWidth}
-            height={singleImgHeight}
-            imgId="7"
-          />
+          {slotsToshow}
         </View>
       )}
     </ScrollView>
