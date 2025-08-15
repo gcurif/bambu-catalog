@@ -29,14 +29,14 @@ const ModalDelete = ({
       >
         <ModalBackdrop />
         <ModalContent>
-          <ModalHeader>
-            <Heading size="md" className="text-typography-950">
+          <ModalHeader className="flex items-start">
+            <Heading size="2xl" className="text-typography-950">
               ¿Esta seguro que desea eliminar esta opción?
             </Heading>
             <ModalCloseButton>
               <Icon
                 as={CloseIcon}
-                size="md"
+                size="xl"
                 className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
               />
             </ModalCloseButton>
@@ -47,12 +47,12 @@ const ModalDelete = ({
               action="secondary"
               onPress={() => onCloseClick?.()}
             >
-              <ButtonText>Volver</ButtonText>
+              <ButtonText size="xl">Volver</ButtonText>
             </Button>
             <Button
               onPress={() => onConfirm?.()}
             >
-              <ButtonText>Eliminar</ButtonText>
+              <ButtonText size="xl">Eliminar</ButtonText>
             </Button>
           </ModalFooter>
         </ModalContent>
