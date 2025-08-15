@@ -5,7 +5,14 @@ import { findItemById } from "@/data/data";
 import { Item, ItemImg } from "@/model/schema";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, Image, Pressable, ScrollView, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 interface ImgSlot {
   imgs: ItemImg[];
@@ -69,6 +76,19 @@ export default function DetalleUnidad() {
   const max = Math.max(single.length, double.length);
   const slotsToshow = [];
 
+  const goToImgZoom = (imgSrc: ItemImg, item: Item) => {
+    router.push({
+      pathname: "/(tabs)/detail/img/[imgname]",
+      params: {
+        imgname: imgSrc.publicUrl,
+        width: imgSrc.width,
+        height: imgSrc.height,
+        label: item.name,
+      },
+    });
+  };
+
+
   for (let i = 0; i < max; i++) {
     if (single[i]) {
       slotsToshow.push(
@@ -77,6 +97,7 @@ export default function DetalleUnidad() {
           width={singleImgWidth}
           height={singleImgHeight}
           imgId="0"
+          onClick={(img) => goToImgZoom(img, item as Item)}
         />
       );
     }
@@ -90,10 +111,13 @@ export default function DetalleUnidad() {
           imgSep={imgSep}
           imgId1="0"
           imgId2="1"
+          onClick={(img) => goToImgZoom(img, item as Item)}
         />
       );
     }
   }
+
+
 
   return (
     <ScrollView style={GlobalStyles.containerScrollable}>
@@ -107,6 +131,7 @@ export default function DetalleUnidad() {
           <Heading size="3xl" className="mt-10 mb-4">
             Galeria
           </Heading>
+          <Text style={{ fontSize: 24 }}>{item?.name}</Text>
           {slotsToshow}
         </View>
       )}
@@ -119,6 +144,7 @@ type SingleImgViewProps = {
   width: number;
   height: number;
   imgId?: string;
+  onClick: (imgSrc: any) => void;
 };
 
 type DoubleImgViewProps = {
@@ -129,17 +155,7 @@ type DoubleImgViewProps = {
   imgSep?: number;
   imgId1?: string;
   imgId2?: string;
-};
-
-const goToImgZoom = (imgSrc: ItemImg) => {
-  router.push({
-    pathname: "/(tabs)/detail/img/[imgname]",
-    params: {
-      imgname: imgSrc.publicUrl,
-      width: imgSrc.width,
-      height: imgSrc.height,
-    },
-  });
+  onClick: (imgSrc: any) => void;
 };
 
 const SingleImgView = ({
@@ -147,10 +163,11 @@ const SingleImgView = ({
   width,
   height,
   imgId,
+  onClick
 }: SingleImgViewProps) => {
   return (
     <View className="mt-4">
-      <Pressable onPress={() => goToImgZoom(imgSrc)}>
+      <Pressable onPress={() => onClick(imgSrc)}>
         <Image
           source={imgSrc.publicUrl}
           style={{ width: width, height: height, resizeMode: "stretch" }}
@@ -168,17 +185,18 @@ const DoubleImgView = ({
   width,
   height,
   imgSep,
+  onClick
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
-      <Pressable onPress={() => goToImgZoom(imgSrc1)}>
+      <Pressable onPress={() => onClick(imgSrc1)}>
         <Image
           source={imgSrc1.publicUrl}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
       {imgSrc2 && (
-        <Pressable onPress={() => goToImgZoom(imgSrc2)}>
+        <Pressable onPress={() => onClick(imgSrc2)}>
           <Image
             source={imgSrc2.publicUrl}
             style={{
