@@ -33,8 +33,8 @@ const FieldTextArea: React.FC<FieldTextAreaProps> = ({
 const stylesInternal = StyleSheet.create({
   input: {
     backgroundColor: "rgba(255, 255, 255, 1)",
-    borderColor: "rgba(217, 235, 255, 1)",
-    borderWidth: 1,
+    borderColor: "rgba(47, 144, 255, 1)",
+    borderWidth: 2,
     borderRadius: 8,
     paddingLeft: 8,
     paddingTop: 2,

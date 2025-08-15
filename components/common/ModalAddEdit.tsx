@@ -11,6 +11,7 @@ import {
   ModalHeader,
 } from "@/components/ui/modal";
 import React from "react";
+import { StyleSheet } from "react-native";
 import Field from "./Field";
 
 const ModalAddEdit = ({
@@ -21,14 +22,23 @@ const ModalAddEdit = ({
   onCancel,
   onCloseClick,
   show,
+  title = "Agregar/Editar Opción",
 }: ModalAddEditProps) => {
+  const fieldRef = React.useRef(null);
+  React.useEffect(() => {
+    console.log("ModalAddEdit mounted", fieldRef);
+    if (fieldRef.current) {
+      fieldRef.current.focus();
+    }
+  }, [show]);
+
   return (
-    <Modal isOpen={show} onClose={() => onCloseClick?.()} size="md">
+    <Modal isOpen={show} onClose={() => onCloseClick?.()} size="lg">
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
-          <Heading size="md" className="text-typography-950">
-            Agregar nueva opción
+          <Heading size="xl" className="text-typography-950">
+            {title}
           </Heading>
           <ModalCloseButton>
             <Icon
@@ -40,6 +50,8 @@ const ModalAddEdit = ({
         </ModalHeader>
         <ModalBody>
           <Field
+            lgBorder={true}
+            inputRef={fieldRef}
             placeholder={inputPlaceHolder}
             value={value}
             onChange={(val) => onChangeValue?.(val)}
@@ -48,16 +60,21 @@ const ModalAddEdit = ({
         </ModalBody>
         <ModalFooter>
           <Button
+            size="xl"
             variant="outline"
             action="secondary"
             onPress={() => {
               onCancel?.();
             }}
           >
-            <ButtonText>Cancelar</ButtonText>
+            <ButtonText size="xl" style={{ fontSize: 20 }}>
+              Cancelar
+            </ButtonText>
           </Button>
-          <Button onPress={() => onConfirm?.(value)}>
-            <ButtonText>Agregar</ButtonText>
+          <Button onPress={() => onConfirm?.(value)} size="xl">
+            <ButtonText size="xl" style={{ fontSize: 20 }}>
+              Agregar
+            </ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -73,6 +90,16 @@ type ModalAddEditProps = {
   onCloseClick: () => void;
   inputPlaceHolder?: string;
   show: boolean;
+  title: string;
 };
+
+const inputStyle = StyleSheet.create({
+  input: {
+    borderColor: "rgba(47, 144, 255, 1)",
+    borderWidth: 2,
+  }
+});
+
+
 
 export default ModalAddEdit;

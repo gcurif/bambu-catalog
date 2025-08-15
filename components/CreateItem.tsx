@@ -151,17 +151,6 @@ export const CreateItem: React.FC<SearchEngineProps> = ({
                         fav: opt.fav || false,
                       }))}
                     />
-                    <Button
-                      size="sm"
-                      style={{
-                        marginLeft: 8,
-                        backgroundColor: "rgba(255, 255, 255, 1)",
-                      }}
-                      onPress={() => setShowModalAdd(true)}
-                      variant="outline"
-                    >
-                      <Text>+</Text>
-                    </Button>
                   </View>
                 );
               case "textlg":

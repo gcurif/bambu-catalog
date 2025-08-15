@@ -80,7 +80,7 @@ export default function EditOptionScreen() {
       {!schemaItem && <Loading show={true} label="Cargando..." />}
 
       {schemaItem && (
-        <ScrollView style={{ marginTop: 16, maxHeight: "80%" }}>
+        <ScrollView style={{ marginTop: 16, maxHeight: "70%" }}>
           {schemaItem.options?.sort(sort).map((opt, index) => (
             <Option
               key={index}
@@ -92,10 +92,14 @@ export default function EditOptionScreen() {
           ))}
         </ScrollView>
       )}
-      <Button style={{ height: 50 }} onPress={() => {
-        setModalItem(null);
-        setShowModalAddEdit(true);
-      }} className="mt-4">
+      <Button
+        style={{ height: 50 }}
+        onPress={() => {
+          setModalItem(null);
+          setShowModalAddEdit(true);
+        }}
+        className="mt-4"
+      >
         <Text size="xl" style={{ color: "#fff" }}>
           Agregar nueva opción
         </Text>
@@ -123,7 +127,7 @@ export default function EditOptionScreen() {
           setShowModalAddEdit(false);
         }}
         onChangeValue={(value) => {
-            console.log("Modal value changed:", value);
+          console.log("Modal value changed:", value);
           setModalItem({ name: value, fav: modalItem?.fav ?? null });
         }}
       />
