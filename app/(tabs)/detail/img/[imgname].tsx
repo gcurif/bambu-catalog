@@ -3,7 +3,6 @@ import React from "react";
 import {
   Dimensions,
   Image,
-  ImageSourcePropType,
   StyleSheet,
   Text,
   View
@@ -23,7 +22,7 @@ const ImgZoom = () => {
       <Text style={{ fontSize: 28 }} className="mt-6 ml-4 mb-4">{label}</Text>
       <Zoom>
         <Image
-          source={imgname as ImageSourcePropType}
+          source={{ uri: imgname as string }}
           style={{
             width: wWidth,
             height: heightPercentage,

@@ -3,6 +3,7 @@ import { Heading } from "@/components/ui/heading";
 import { GlobalStyles } from "@/constants/GlobalStyles";
 import { findItemById } from "@/data/data";
 import { Item, ItemImg } from "@/model/schema";
+import 'core-js/actual/object/group-by';
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -88,7 +89,6 @@ export default function DetalleUnidad() {
     });
   };
 
-
   for (let i = 0; i < max; i++) {
     if (single[i]) {
       slotsToshow.push(
@@ -116,8 +116,6 @@ export default function DetalleUnidad() {
       );
     }
   }
-
-
 
   return (
     <ScrollView style={GlobalStyles.containerScrollable}>
@@ -163,13 +161,13 @@ const SingleImgView = ({
   width,
   height,
   imgId,
-  onClick
+  onClick,
 }: SingleImgViewProps) => {
   return (
     <View className="mt-4">
       <Pressable onPress={() => onClick(imgSrc)}>
         <Image
-          source={imgSrc.publicUrl}
+          source={{ uri: imgSrc.publicUrl }}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
@@ -185,20 +183,20 @@ const DoubleImgView = ({
   width,
   height,
   imgSep,
-  onClick
+  onClick,
 }: DoubleImgViewProps) => {
   return (
     <View className="mt-4 flex-row">
       <Pressable onPress={() => onClick(imgSrc1)}>
         <Image
-          source={imgSrc1.publicUrl}
+          source={{ uri: imgSrc1.publicUrl }}
           style={{ width: width, height: height, resizeMode: "stretch" }}
         />
       </Pressable>
       {imgSrc2 && (
         <Pressable onPress={() => onClick(imgSrc2)}>
           <Image
-            source={imgSrc2.publicUrl}
+            source={{ uri: imgSrc2.publicUrl }}
             style={{
               width: width,
               height: height,

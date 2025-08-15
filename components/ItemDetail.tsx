@@ -11,7 +11,6 @@ const ItemDetail: React.FC<{
   item: Item;
   schema: FilterSchemaItem[] | undefined;
 }> = ({ item, schema = [] }) => {
-
   const img = item.imgs && item.imgs.length > 0 ? item.imgs[0] : null;
   const schemaToShow = schema?.sort((a, b) => a.orderToShow! - b.orderToShow!);
 
@@ -23,7 +22,10 @@ const ItemDetail: React.FC<{
         <View style={styles.imageContainer}>
           {img ? (
             <Pressable onPress={() => router.push(`/(tabs)/detail/${item.id}`)}>
-              <Image source={img.publicUrl} style={{ width: 200, height: 200 }} />
+              <Image
+                source={{ uri: img.publicUrl }}
+                style={{ width: 200, height: 200 }}
+              />
             </Pressable>
           ) : (
             <Image
@@ -34,12 +36,12 @@ const ItemDetail: React.FC<{
         </View>
         <View style={styles.detailsContainer}>
           {schemaToShow.map((s, index) => (
-            <>
-              <Text key={index} style={styles.detailText}>
+            <React.Fragment key={index}>
+              <Text style={styles.detailText}>
                 {s.name}: {item.properties[s.name]}
               </Text>
               <Divider className="my-1" />
-            </>
+            </React.Fragment>
           ))}
         </View>
       </View>
