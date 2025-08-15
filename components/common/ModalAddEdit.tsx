@@ -42,7 +42,7 @@ const ModalAddEdit = ({
           <Field
             placeholder={inputPlaceHolder}
             value={value}
-            onChange={() => onChangeValue?.(value)}
+            onChange={(val) => onChangeValue?.(val)}
             type="text"
           />
         </ModalBody>
