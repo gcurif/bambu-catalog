@@ -2,18 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { FilterSchemaItem } from "@/model/schema";
+import { router } from "expo-router";
 import React from "react";
 
 import { ScrollView, StyleSheet, View } from "react-native";
 
 export interface SearchEngineProps {
   schema: FilterSchemaItem[];
-  onSearch?: (searchTerm: string, filters: Record<string, string>) => void;
 }
 
 export const EditItem: React.FC<SearchEngineProps> = ({
   schema = [],
-  onSearch,
 }) => {
 
   return (
@@ -25,7 +24,7 @@ export const EditItem: React.FC<SearchEngineProps> = ({
         <View key={index} style={styles.filterContainer}>
           {item.type === "option" && (
             <View style={styles.optionContainer}>
-              <Button style={styles.button} size="xl" onPress={() => null}>
+              <Button style={styles.button} size="xl" onPress={() => router.push(`/editoption/${item.id}`)}>
                 <Text style={styles.buttonText}>{item.name}</Text>
               </Button>
             </View>
