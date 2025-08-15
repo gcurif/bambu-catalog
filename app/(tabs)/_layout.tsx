@@ -14,7 +14,7 @@ const LOGIN_STATUS = {
 
 export default function TabLayout() {
   const pathname = usePathname();
-  const debug = true;
+  const debug = false;
 
   const { logout} = useGlobalSearchParams();
 

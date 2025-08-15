@@ -1,5 +1,6 @@
 import { GlobalPresets, GlobalStyles } from "@/constants/GlobalStyles";
 import { getUserByUsrNameAndPass } from "@/data/data";
+import { useUser } from "@/hooks/useUser";
 import { User } from "@/model/schema";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect } from "react";
@@ -19,6 +20,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showError, setShowError] = React.useState(false);
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     setLoading(true);
@@ -28,6 +30,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         if (user) {
           setLoading(false);
           const parsedUser = JSON.parse(user);
+          setUser(parsedUser);
           onLogin(parsedUser);
         }
         setLoading(false);
@@ -44,6 +47,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       .then((user) => {
         setLoading(false);
         if (user) {
+          setUser(user);
           onLogin(user);
           SecureStore.setItemAsync(
             "user",

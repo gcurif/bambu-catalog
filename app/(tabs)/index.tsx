@@ -2,6 +2,7 @@ import Loading from "@/components/common/Loading";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { AddIcon, EditIcon, SearchIcon } from "@/components/ui/icon";
 import { GlobalPresets } from "@/constants/GlobalStyles";
+import { useUser } from "@/hooks/useUser";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React from "react";
@@ -9,11 +10,14 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 
 const MainMenu = () => {
   const [loading, setLoading] = React.useState(false);
+  const { user, setUser } = useUser();
+  console.log("user", user);
   const exit = () => {
     setLoading(true);
     // Simulate an exit operation
     SecureStore.deleteItemAsync("user")
       .then(() => {
+        setUser(null);
         setLoading(false);
         router.replace("/?logout=true");
       })
@@ -33,25 +37,23 @@ const MainMenu = () => {
         icon={SearchIcon}
         onPress={() => router.push("/search")}
       />
-      <OptionButton
-        title="Agregar Nuevo"
-        icon={AddIcon}
-        onPress={() => router.push("/add")}
-      />
-      <OptionButton
-        title="Editar Opciones"
-        icon={EditIcon}
-        onPress={() => router.push("/edit")}
-      />
-      <OptionButton
-        title="Cambiar Usuario"
-        icon={EditIcon}
-        onPress={exit}
-      />
-      <Loading
-        show={loading}
-        label="Saliendo..."
-      />
+      {user?.type === "admin" && (
+        <>
+          <OptionButton
+            title="Agregar Nuevo"
+            icon={AddIcon}
+            onPress={() => router.push("/add")}
+          />
+          <OptionButton
+            title="Editar Opciones"
+            icon={EditIcon}
+            onPress={() => router.push("/edit")}
+          />
+        </>
+      )}
+
+      <OptionButton title="Cambiar Usuario" icon={EditIcon} onPress={exit} />
+      <Loading show={loading} label="Saliendo..." />
       {/*
           {
     <OptionButton
